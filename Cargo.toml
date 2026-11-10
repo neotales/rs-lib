@@ -6,6 +6,7 @@ members = [
   "std/env",
   "os/process",
   "docker/bake",
+  "docker/compose",
   "docker/buildkit",
   "docker/oci",
   "docker/engine",
@@ -79,6 +80,7 @@ nix = { version = "0.31", default-features = false, features = ["process", "sign
 tempfile = "3.24"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+serde_yaml = "0.9"
 tokio = { version = "1.47", features = ["macros", "rt", "sync", "time"] }
 url = "2.5"
 # 1.9.1 redacts `Zeroizing`'s Debug output. neotales-keepass was tested against

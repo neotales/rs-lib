@@ -1,0 +1,7 @@
+services:
+  app:
+    image: '{{ .repository | lower }}:${CHANNEL:-stable}'
+    environment:
+      REPOSITORY: '{{ .repository | lower | quote }}'
+      RELEASE: '{{ .release | upper }}'
+      COMPONENT: '{{ default "app" .component }}'

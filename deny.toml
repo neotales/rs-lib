@@ -18,6 +18,11 @@ ignore = [
     for that decrypt path. neotales-age's private RSA decrypt goes through \
     sad_rsa decrypt_blinded, and this is not a mitigation. This is not a mitigation. Delete this entry when rsa \
     leaves the graph or the crate moves to a patched line.""" },
+  { id = "RUSTSEC-2024-0449", reason = """\
+    unsafe-libyaml is unmaintained. No patched release exists. \
+    neotales-docker-compose uses serde_yaml 0.9, and its YAML output and tests were \
+    written against that parser. Replacing it is not this import. This is not a \
+    mitigation. Delete this entry when that parser leaves the graph.""" },
 ]
 
 [licenses]

@@ -1,0 +1,49 @@
+[package]
+name = "neotales-docker-compose"
+description = "Explicit, daemon-free Compose document and resolution primitives"
+version = "0.0.0-alpha.1"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["docker", "compose", "yaml", "oci", "config"]
+categories = ["config", "parser-implementations"]
+
+[features]
+default = []
+templates = ["dep:neotales-gotmpl", "dep:neotales-sprig"]
+
+[dependencies]
+# Each of these moved into its own area when the repository was laid out, and each
+# carries a version as well as a path: cargo ignores the version while the path
+# resolves, and refuses to publish the crate without it.
+neotales-dotenv = { path = "../../std/dotenv", version = "0.0.0-alpha.1" }
+neotales-env = { path = "../../std/env", version = "0.0.0-alpha.1" }
+neotales-gotmpl = { path = "../../templates/gotmpl", version = "0.0.0-alpha.1", optional = true }
+neotales-sprig = { path = "../../templates/sprig", version = "0.0.0-alpha.1", optional = true }
+serde.workspace = true
+serde_json.workspace = true
+serde_yaml.workspace = true
+sha2.workspace = true
+
+[dev-dependencies]
+neotales-sprig = { path = "../../templates/sprig", version = "0.0.0-alpha.1" }
+tempfile.workspace = true
+tokio = { workspace = true, features = ["macros", "rt", "rt-multi-thread"] }
+
+# These exercise the template and values boundary, which only exists with the
+# `templates` feature. Declaring it here means `cargo test -p
+# neotales-docker-compose` skips them rather than failing to resolve their
+# imports, instead of the targets only compiling because a workspace build
+# happened to unify the feature on from another crate.
+[[test]]
+name = "templates"
+required-features = ["templates"]
+
+[[test]]
+name = "values"
+required-features = ["templates"]
+
+[lints]
+workspace = true
