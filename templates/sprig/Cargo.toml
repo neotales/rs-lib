@@ -1,0 +1,16 @@
+[package]
+name = "neotales-sprig"
+description = "Safe, deterministic Sprig-compatible template helper functions, with no clock, randomness or filesystem access"
+version = "0.0.0-alpha.1"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["template", "sprig", "helm", "go", "helpers"]
+categories = ["template-engine", "text-processing"]
+
+[dependencies]
+
+[lints]
+workspace = true

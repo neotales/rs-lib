@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["std/args", "std/dotenv", "std/env"]
+members = ["std/args", "std/dotenv", "std/env", "templates/sprig"]
 
 [workspace.package]
 edition = "2024"
