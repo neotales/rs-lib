@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "statuses": [
+    {
+      "phase": "queued"
+    },
+    {
+      "phase": "preparing_context",
+      "context_bytes": 13
+    },
+    {
+      "phase": "solving",
+      "vertex": "[internal] load build definition from Dockerfile",
+      "current": 1,
+      "total": 1
+    },
+    {
+      "phase": "exporting",
+      "image_ref": "registry.example/buildkit-fixture:latest"
+    },
+    {
+      "phase": "completed",
+      "image_refs": [
+        "registry.example/buildkit-fixture:latest"
+      ]
+    }
+  ]
+}

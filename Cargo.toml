@@ -5,6 +5,7 @@ members = [
   "std/dotenv",
   "std/env",
   "os/process",
+  "docker/buildkit",
   "templates/sprig",
   "templates/gotmpl",
 ]
@@ -22,6 +23,9 @@ nix = { version = "0.31", default-features = false, features = ["process", "sign
 tempfile = "3.24"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+tokio = { version = "1.47", features = ["macros", "rt", "sync", "time"] }
+url = "2.5"
+zeroize = { version = "1.9", features = ["derive"] }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
