@@ -1,0 +1,15 @@
+# Stable rustfmt only.
+#
+# Do not add nightly-only options. CI runs stable `cargo fmt --check`, so a
+# nightly-only import layout would format cleanly on a developer machine that
+# happens to have nightly installed and fail in CI for everyone else. If a rule
+# needs a nightly feature, the answer is a review convention, not a pinned
+# nightly toolchain.
+edition = "2024"
+max_width = 100
+use_field_init_shorthand = true
+use_try_shorthand = true
+newline_style = "Unix"
+
+# `imports_granularity` and `group_imports` are nightly-only rustfmt options and
+# are deliberately not set. Import grouping is a review convention instead.

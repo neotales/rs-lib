@@ -1,0 +1,16 @@
+[package]
+name = "neotales-args"
+description = "Literal argv parsing and argument-vector ergonomics, with no shell evaluation"
+version = "0.0.0-alpha.1"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["argv", "cli", "arguments", "parsing", "shell"]
+categories = ["command-line-interface", "parser-implementations"]
+
+[dependencies]
+
+[lints]
+workspace = true
