@@ -1,8 +1,8 @@
 //! SSH public/private key wire parsing used by age SSH recipients.
 
-use crate::openssh_bcrypt;
 use base64::{self, Engine as _};
 use des::cipher::InnerIvInit as DesInnerIvInit;
+use neotales_x509::openssh_bcrypt;
 use {
     aes::cipher::{BlockModeDecrypt, KeyInit, KeyIvInit, StreamCipher},
     ed25519_dalek::{SigningKey, pkcs8::DecodePrivateKey as EdDecodePrivateKey},

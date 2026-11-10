@@ -42,7 +42,7 @@ const MAGIC: [u8; BLOCK_SIZE] = *b"OxychromaticBlowfishSwatDynamite";
 
 /// Invalid OpenSSH bcrypt key-derivation input.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub(crate) enum OpenSshBcryptError {
+pub enum OpenSshBcryptError {
     /// The password was empty.
     EmptyPassword,
     /// The password exceeded 1,048,576 bytes.
@@ -84,7 +84,7 @@ impl std::error::Error for OpenSshBcryptError {}
 /// bytes, [`OpenSshBcryptError::InvalidSalt`] when `salt` is empty or exceeds
 /// 1,048,576 bytes, and [`OpenSshBcryptError::InvalidOutputLength`] when
 /// `output_len` is outside 1..=1024.
-pub(crate) fn derive_key(
+pub fn derive_key(
     password: &[u8],
     salt: &[u8],
     rounds: u32,

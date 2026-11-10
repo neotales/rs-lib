@@ -24,7 +24,6 @@ mod error;
 mod file;
 mod header;
 mod identity;
-mod openssh_bcrypt;
 mod options;
 mod p256_hpke;
 mod parse;

@@ -19,7 +19,7 @@ pub mod ssh;
 pub mod ssh_cert;
 pub mod ssh_keypair;
 
-mod openssh_bcrypt;
+pub mod openssh_bcrypt;
 mod ssh_wire;
 
 pub use openssh_cert::OpenSshCertError;
