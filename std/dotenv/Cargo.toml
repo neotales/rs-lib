@@ -1,0 +1,16 @@
+[package]
+name = "neotales-dotenv"
+description = "Source-preserving dotenv document parsing with no I/O, no interpolation and no key policy"
+version = "0.0.0-alpha.1"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["dotenv", "env", "parser", "configuration"]
+categories = ["parser-implementations", "config"]
+
+[dependencies]
+
+[lints]
+workspace = true

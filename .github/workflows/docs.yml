@@ -7,11 +7,13 @@ on:
     branches: [dev]
     paths:
       - "std/args/**"
+      - "std/dotenv/**"
       - "Cargo.toml"
       - ".github/workflows/docs.yml"
   pull_request:
     paths:
       - "std/args/**"
+      - "std/dotenv/**"
       - "Cargo.toml"
       - ".github/workflows/docs.yml"
   workflow_dispatch:
@@ -42,4 +44,4 @@ jobs:
       - name: Build documentation
         env:
           RUSTDOCFLAGS: "-D warnings"
-        run: cargo doc -p neotales-args --all-features --no-deps
+        run: cargo doc -p neotales-args -p neotales-dotenv --all-features --no-deps

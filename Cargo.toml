@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["std/args"]
+members = ["std/args", "std/dotenv"]
 
 [workspace.package]
 edition = "2024"
