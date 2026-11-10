@@ -76,6 +76,18 @@ impl std::error::Error for OpenSshBcryptError {}
 /// bcrypt key schedule. This is not compatible with the `$2a$` password-hash
 /// format implemented by password-hashing libraries.
 ///
+/// # Examples
+///
+/// ```
+/// use neotales_x509::openssh_bcrypt::{self, OpenSshBcryptError};
+///
+/// let key = openssh_bcrypt::derive_key(b"password", b"salt", 4, 32)?;
+/// assert_eq!(key.len(), 32);
+///
+/// let rejected = openssh_bcrypt::derive_key(b"", b"salt", 4, 32);
+/// assert_eq!(rejected, Err(OpenSshBcryptError::EmptyPassword));
+/// # Ok::<(), OpenSshBcryptError>(())
+/// ```
 /// # Errors
 ///
 /// Returns [`OpenSshBcryptError::InvalidRounds`] when `rounds` is outside
