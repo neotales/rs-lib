@@ -7,7 +7,9 @@ target/
 /artifacts/
 *.crate
 
-# Editor and IDE state.
+# Editor noise. `.vscode` itself is allowed: this directory is the root of the
+# published repository, so committed editor settings, `.agents`, and `.github`
+# belong here and are exported. Only the uncommitted noise is ignored.
 .vscode/*
 !.vscode/settings.json
 !.vscode/extensions.json
