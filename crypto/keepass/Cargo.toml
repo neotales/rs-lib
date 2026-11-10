@@ -1,0 +1,43 @@
+[package]
+name = "neotales-keepass"
+description = "Headless, bounded KeePass KDBX document and wire codec"
+version = "0.0.0-alpha.3"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["keepass", "kdbx", "password-manager", "security"]
+categories = ["cryptography", "parser-implementations"]
+
+
+[dependencies]
+aes.workspace = true
+argon2.workspace = true
+base64.workspace = true
+cbc.workspace = true
+# The shared entry carries `cipher`, `legacy` and `xchacha` for the crypto area's
+# own use. KDBX additionally needs the cipher to zeroize on drop, so the extra is
+# declared here rather than added to the shared entry, where it would be forced on
+# every crate in the workspace.
+chacha20 = { workspace = true, features = ["zeroize"] }
+# The 0.11 digest line, matching `neotales-crypto` and `neotales-x509`. The shared
+# entry is 0.10 because the OCI crate needs it, and two majors of a hashing crate
+# coexisting is cheaper than pinning OCI to a version it does not want.
+digest = "0.11.3"
+flate2.workspace = true
+getrandom.workspace = true
+hmac.workspace = true
+quick-xml.workspace = true
+sha1.workspace = true
+sha2 = "0.11"
+salsa20.workspace = true
+thiserror.workspace = true
+time.workspace = true
+zeroize.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+
+[lints]
+workspace = true
