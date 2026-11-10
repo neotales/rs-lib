@@ -1,0 +1,43 @@
+name: msrv
+
+# Builds neotales-args on the declared minimum compiler. One platform. The
+# three-platform std workflow already covers the same pin; this job is the
+# promise that the floor itself still compiles.
+
+on:
+  schedule:
+    - cron: "23 6 * * 4"
+  pull_request:
+    paths:
+      - "std/args/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "rust-toolchain.toml"
+      - ".github/workflows/msrv.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: msrv-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+
+jobs:
+  msrv:
+    name: msrv
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup-rust
+        with:
+          cache-key: msrv
+
+      - name: Test on the pinned compiler
+        run: cargo test -p neotales-args --all-targets --all-features

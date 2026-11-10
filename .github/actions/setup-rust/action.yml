@@ -1,0 +1,44 @@
+name: Setup Rust
+description: Install the pinned toolchain and cache this pipeline's target directory only.
+
+inputs:
+  root:
+    description: Directory that contains rust-toolchain.toml, relative to the repository root.
+    required: false
+    default: "."
+  cache-key:
+    description: Cache key for this pipeline. One group's build must not fill another's cache.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Install the toolchain
+      uses: dtolnay/rust-toolchain@02cb101ec7c40f2c49e1d9714d64511d8e1b74de # v1
+      with:
+        toolchain: 1.98.1
+        components: clippy, rustfmt, rust-src
+
+    - name: Check the toolchain against rust-toolchain.toml
+      shell: bash
+      env:
+        ROOT: ${{ inputs.root }}
+      run: |
+        set -euo pipefail
+        file="$ROOT/rust-toolchain.toml"
+        declared=$(sed -n 's/^channel[[:space:]]*=[[:space:]]*"\(.*\)"$/\1/p' "$file")
+        actual=$(rustc --version | awk '{print $2}')
+        echo "declared: ${declared:-<unset>}"
+        echo "installed: ${actual}"
+        if [ -z "$declared" ] || [ "${declared%%-*}" != "$actual" ]; then
+          echo "::error::${file} says ${declared:-<unset>} and this job installed ${actual}."
+          exit 1
+        fi
+
+    - name: Cache this pipeline's build
+      uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      with:
+        workspaces: ${{ inputs.root }} -> target
+        prefix-key: rust-1.98.1
+        cache-bin: false
+        key: ${{ inputs.cache-key }}

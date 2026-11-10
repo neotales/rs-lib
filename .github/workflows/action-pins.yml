@@ -1,0 +1,35 @@
+name: action pins
+
+# A tag can move. A commit cannot. Every third-party action must be a full SHA.
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - ".github/**"
+      - "eng/check-action-pins.sh"
+  pull_request:
+    paths:
+      - ".github/**"
+      - "eng/check-action-pins.sh"
+  schedule:
+    - cron: "17 12 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: action-pins-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pins:
+    name: pins
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Require commit pins
+        run: eng/check-action-pins.sh .github/workflows/*.yml .github/actions/setup-rust/action.yml

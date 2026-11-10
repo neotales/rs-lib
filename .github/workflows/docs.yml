@@ -1,0 +1,45 @@
+name: docs
+
+# Builds the API docs. It does not publish them.
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - "std/args/**"
+      - "Cargo.toml"
+      - ".github/workflows/docs.yml"
+  pull_request:
+    paths:
+      - "std/args/**"
+      - "Cargo.toml"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+
+jobs:
+  docs:
+    name: docs
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup-rust
+        with:
+          cache-key: docs
+
+      - name: Build documentation
+        env:
+          RUSTDOCFLAGS: "-D warnings"
+        run: cargo doc -p neotales-args --all-features --no-deps

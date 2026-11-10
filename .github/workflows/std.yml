@@ -1,0 +1,68 @@
+name: std
+
+# The std pipeline. It builds only the crates in this group, never the workspace.
+# Today that is neotales-args. Adding env or dotenv means adding them to the
+# cargo -p list and to the path filters, not a second workflow.
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - "std/args/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "rust-toolchain.toml"
+      - "rustfmt.toml"
+      - ".github/workflows/std.yml"
+      - ".github/actions/setup-rust/**"
+  pull_request:
+    paths:
+      - "std/args/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "rust-toolchain.toml"
+      - "rustfmt.toml"
+      - ".github/workflows/std.yml"
+      - ".github/actions/setup-rust/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: std-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+
+jobs:
+  check:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup-rust
+        with:
+          cache-key: std
+
+      - name: Format
+        run: cargo fmt -p neotales-args -- --check
+
+      - name: Clippy
+        run: cargo clippy -p neotales-args --all-targets --all-features -- -D warnings
+
+      - name: Test
+        run: cargo test -p neotales-args --all-targets --all-features
+
+      - name: Documentation
+        env:
+          RUSTDOCFLAGS: "-D warnings"
+        run: cargo doc -p neotales-args --all-features --no-deps
