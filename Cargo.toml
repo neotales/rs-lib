@@ -8,6 +8,7 @@ members = [
   "docker/buildkit",
   "docker/oci",
   "crypto/keepass",
+  "crypto/keepass-platform",
   "templates/sprig",
   "templates/gotmpl",
 ]

@@ -1,13 +1,15 @@
 name: keepass
 
 # The keepass pipeline. It builds only this group, never the workspace.
-# Today that is neotales-keepass. Ignored interop tests are not this job.
+# Today that is neotales-keepass and neotales-keepass-platform.
+# Ignored interop tests are not this job.
 
 on:
   push:
     branches: [dev]
     paths:
       - "crypto/keepass/**"
+      - "crypto/keepass-platform/**"
       - "Cargo.toml"
       - "Cargo.lock"
       - "rust-toolchain.toml"
@@ -17,6 +19,7 @@ on:
   pull_request:
     paths:
       - "crypto/keepass/**"
+      - "crypto/keepass-platform/**"
       - "Cargo.toml"
       - "Cargo.lock"
       - "rust-toolchain.toml"
@@ -53,18 +56,18 @@ jobs:
           cache-key: keepass
 
       - name: Format
-        run: cargo fmt -p neotales-keepass -- --check
+        run: cargo fmt -p neotales-keepass -p neotales-keepass-platform -- --check
 
       - name: Clippy
-        run: cargo clippy -p neotales-keepass --all-targets --all-features -- -D warnings
+        run: cargo clippy -p neotales-keepass -p neotales-keepass-platform --all-targets --all-features -- -D warnings
 
       - name: Test
-        run: cargo test -p neotales-keepass --all-targets --all-features
+        run: cargo test -p neotales-keepass -p neotales-keepass-platform --all-targets --all-features
 
       - name: Documentation
         env:
           RUSTDOCFLAGS: "-D warnings"
-        run: cargo doc -p neotales-keepass --all-features --no-deps
+        run: cargo doc -p neotales-keepass -p neotales-keepass-platform --all-features --no-deps
 
   msrv:
     name: msrv
@@ -78,4 +81,4 @@ jobs:
           cache-key: keepass-msrv
 
       - name: Test on the pinned compiler
-        run: cargo test -p neotales-keepass --all-targets --all-features
+        run: cargo test -p neotales-keepass -p neotales-keepass-platform --all-targets --all-features

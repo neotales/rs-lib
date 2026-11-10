@@ -1,0 +1,35 @@
+[package]
+name = "neotales-keepass-platform"
+description = "Optional platform-specific memory protection adapters for neotales-keepass"
+version = "0.0.0-alpha.3"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["keepass", "dpapi", "mlock", "memory-protection"]
+categories = ["cryptography", "os"]
+
+[features]
+default = []
+# DPAPI, for holding a vault key where the platform will not let it reach a page
+# file. Windows only, and off by default.
+windows-dpapi = ["dep:windows-dpapi"]
+# Page-aligned Unix mlock adapter. Off by default, and it does not relax the
+# workspace `forbid(unsafe_code)`: the shim is a `#[cfg(unix)]` module that
+# carries its own local allowance with a reason.
+memory-pin = ["dep:memmap2", "dep:region"]
+
+[dependencies]
+# The version is required as well as the path: cargo ignores the version while the
+# path resolves, and refuses to publish the crate without it.
+neotales-keepass = { path = "../keepass", version = "0.0.0-alpha.3" }
+zeroize.workspace = true
+memmap2 = { version = "0.9.11", optional = true }
+region = { version = "4.0.1", optional = true }
+
+[target.'cfg(windows)'.dependencies]
+windows-dpapi = { version = "0.2.0", optional = true }
+
+[lints]
+workspace = true
