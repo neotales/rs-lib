@@ -1,0 +1,34 @@
+[package]
+name = "neotales-process"
+description = "Portable command graph parsing and direct child process execution, without a shell"
+version = "0.0.0-alpha.1"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["process", "command", "exec", "cli", "subprocess"]
+categories = ["command-line-interface", "os::unix-apis"]
+
+# The conformance fixture is a test helper that the other language ports run. It
+# is published here rather than moved out on purpose, for now: the other ports
+# consume it by name, and moving it is a change to a contract they depend on.
+# Whether it belongs in a published crate at all is tracked as a finding.
+[[bin]]
+name = "neotales-process-fixture"
+path = "src/conformance_fixture.rs"
+
+[dependencies]
+# The version is required as well as the path. Cargo ignores the version when the
+# path resolves, so local builds use the sibling checkout, and the version is what
+# makes this crate publishable at all. A path-only dependency cannot be published.
+neotales-args = { path = "../../std/args", version = "0.0.0-alpha.1" }
+
+[dev-dependencies]
+tempfile.workspace = true
+
+[target.'cfg(unix)'.dependencies]
+nix.workspace = true
+
+[lints]
+workspace = true

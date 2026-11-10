@@ -1,6 +1,13 @@
 [workspace]
 resolver = "3"
-members = ["std/args", "std/dotenv", "std/env", "templates/sprig", "templates/gotmpl"]
+members = [
+  "std/args",
+  "std/dotenv",
+  "std/env",
+  "os/process",
+  "templates/sprig",
+  "templates/gotmpl",
+]
 
 [workspace.package]
 edition = "2024"
@@ -11,6 +18,8 @@ authors = ["Neotales"]
 
 [workspace.dependencies]
 indexmap = { version = "2.12", features = ["serde"] }
+nix = { version = "0.31", default-features = false, features = ["process", "signal"] }
+tempfile = "3.24"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
