@@ -104,6 +104,22 @@ impl TemplateValues for BTreeMap<String, Value> {
 /// Template errors are returned directly from `neotales-gotmpl`; rendered
 /// values are never added to diagnostics.
 ///
+/// # Examples
+///
+/// ```
+/// use neotales_docker_bake::{TemplateOptions, VariableValues, render_template};
+///
+/// # fn main() -> Result<(), Box<dyn std::error::Error>> {
+/// let values = VariableValues::from_pairs([("name", "app")]);
+/// let rendered = render_template("image: {{ .name }}", &values, &TemplateOptions::default())?;
+/// assert_eq!(rendered, "image: app");
+///
+/// let rejected = render_template("{{", &VariableValues::new(), &TemplateOptions::default());
+/// assert!(rejected.is_err());
+/// # Ok(())
+/// # }
+/// ```
+///
 /// # Errors
 ///
 /// Returns a parse, safe-helper, cancellation, or resource-limit error.

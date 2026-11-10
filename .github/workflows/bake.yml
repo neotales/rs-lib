@@ -1,6 +1,6 @@
 name: bake
 
-# The oci pipeline. It builds only this group, never the workspace.
+# The bake pipeline. It builds only this group, never the workspace.
 # Today that is neotales-docker-bake.
 
 on:

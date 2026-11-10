@@ -227,6 +227,21 @@ impl LoadedDotenv {
 /// only applies Bake-owned key, invalid-node, interpolation, and precedence
 /// policy. It never opens a path or reads process state.
 ///
+/// # Examples
+///
+/// ```
+/// use neotales_docker_bake::{DotenvOptions, load_dotenv};
+///
+/// # fn main() -> Result<(), Box<dyn std::error::Error>> {
+/// let loaded = load_dotenv("ROOT=compose\n", "example.env", DotenvOptions::default())?;
+/// assert_eq!(loaded.values().get("ROOT"), Some("compose"));
+///
+/// let rejected = load_dotenv("not-an-assignment\n", "bad.env", DotenvOptions::default());
+/// assert!(rejected.is_err());
+/// # Ok(())
+/// # }
+/// ```
+///
 /// # Errors
 ///
 /// Returns a repository-owned error for an oversized source, cancellation,
