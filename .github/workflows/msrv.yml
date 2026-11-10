@@ -11,6 +11,7 @@ on:
     paths:
       - "std/args/**"
       - "std/dotenv/**"
+      - "std/env/**"
       - "Cargo.toml"
       - "Cargo.lock"
       - "rust-toolchain.toml"
@@ -41,4 +42,4 @@ jobs:
           cache-key: msrv
 
       - name: Test on the pinned compiler
-        run: cargo test -p neotales-args -p neotales-dotenv --all-targets --all-features
+        run: cargo test -p neotales-args -p neotales-dotenv -p neotales-env --all-targets --all-features

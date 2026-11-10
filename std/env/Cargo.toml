@@ -1,0 +1,17 @@
+[package]
+name = "neotales-env"
+description = "Pure environment interpolation, PATH composition and reversible shell diffs, with no process mutation"
+version = "0.0.0-alpha.1"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["environment", "dotenv", "path", "shell", "interpolation"]
+categories = ["command-line-interface", "config"]
+
+[dependencies]
+indexmap.workspace = true
+
+[lints]
+workspace = true
