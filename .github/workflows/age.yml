@@ -1,0 +1,82 @@
+name: age
+
+# The age pipeline. It builds only this group, never the workspace.
+# Today that is neotales-age.
+# Ignored interop tests are not this job.
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - "crypto/age/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "rust-toolchain.toml"
+      - "rustfmt.toml"
+      - ".github/workflows/age.yml"
+      - ".github/actions/setup-rust/**"
+  pull_request:
+    paths:
+      - "crypto/age/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "rust-toolchain.toml"
+      - "rustfmt.toml"
+      - ".github/workflows/age.yml"
+      - ".github/actions/setup-rust/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: age-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: "0"
+
+jobs:
+  check:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup-rust
+        with:
+          cache-key: age
+
+      - name: Format
+        run: cargo fmt -p neotales-age -- --check
+
+      - name: Clippy
+        run: cargo clippy -p neotales-age --all-targets --all-features -- -D warnings
+
+      - name: Test
+        run: cargo test -p neotales-age --all-targets --all-features
+
+      - name: Documentation
+        env:
+          RUSTDOCFLAGS: "-D warnings"
+        run: cargo doc -p neotales-age --all-features --no-deps
+
+  msrv:
+    name: msrv
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup-rust
+        with:
+          cache-key: age-msrv
+
+      - name: Test on the pinned compiler
+        run: cargo test -p neotales-age --all-targets --all-features

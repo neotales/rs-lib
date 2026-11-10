@@ -15,7 +15,8 @@ ignore = [
   { id = "RUSTSEC-2023-0071", reason = """\
     Marvin attack timing sidechannel in rsa 0.9 private-key decryption. No patched \
     0.9 release exists. neotales-x509 uses rsa for key parsing and signatures, not \
-    for that decrypt path. This is not a mitigation. Delete this entry when rsa \
+    for that decrypt path. neotales-age's private RSA decrypt goes through \
+    sad_rsa decrypt_blinded, and this is not a mitigation. This is not a mitigation. Delete this entry when rsa \
     leaves the graph or the crate moves to a patched line.""" },
 ]
 

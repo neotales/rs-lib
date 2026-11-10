@@ -10,6 +10,7 @@ members = [
   "crypto/keepass",
   "crypto/keepass-platform",
   "crypto/x509",
+  "crypto/age",
   "templates/sprig",
   "templates/gotmpl",
 ]
@@ -22,6 +23,15 @@ repository = "https://github.com/neotales/rs-lib"
 authors = ["Neotales"]
 
 [workspace.dependencies]
+chacha20poly1305 = { version = "0.11", features = ["reduced-round"] }
+des = { version = "0.9.0", features = ["zeroize"] }
+getrandom_v04 = { package = "getrandom", version = "0.4", features = ["sys_rng"] }
+hkdf = "0.13.0"
+hpke = { version = "0.14.1", features = ["nistp"] }
+md-5 = "0.11.0"
+sad-rsa = { version = "0.10.2", features = ["std"] }
+scrypt = "0.12.0"
+x25519-dalek = { version = "3.0.0", features = ["static_secrets"] }
 aes = "0.9.2"
 argon2 = "0.6.0"
 base64 = "0.22"
