@@ -1,0 +1,34 @@
+# Normalise text to LF in the repository.
+* text=auto eol=lf
+
+# Fixtures and release artifacts are bytes. A lone CR in a fixture is data.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.wasm binary
+*.zip binary
+*.tar binary
+*.tar.gz binary
+*.tgz binary
+*.kdbx binary
+*.age binary
+*.der binary
+*.p12 binary
+*.pfx binary
+
+# Vendored third-party sources stay out of the language statistics.
+vendor/** linguist-vendored
+
+# A library lockfile is committed so CI builds one commit the same way twice.
+# Linguist still treats it as generated.
+Cargo.lock linguist-generated=true
+
+# Build output, if a target directory is ever force-added.
+target/** linguist-generated=true linguist-vendored
+artifacts/** linguist-generated=true linguist-vendored

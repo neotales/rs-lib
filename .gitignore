@@ -1,0 +1,44 @@
+# Cargo build output. One directory at the repository root, plus any stray
+# target/ left by a build started in a subdirectory. Never commit either.
+target/
+**/target/
+
+# cargo package output and release staging.
+/artifacts/
+*.crate
+
+# Editor and IDE state.
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Operating system noise.
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local environment and credentials. A token in a committed file is a published
+# token. Do not add a blanket *.key or *.pem rule: that has hidden a test
+# fixture a build needed. Except a real secret by name when one exists.
+.env
+.env.*
+!.env.example
+
+# Coverage and profiling output.
+*.profraw
+*.profdata
+lcov.info
+coverage/
+tarpaulin-report.html
+
+# Python bytecode from a script, if one is added later.
+__pycache__/
+*.pyc
+
+# Another agent's local session files. A git add -A has committed these before.
+.agentsroom/
+.claude/
