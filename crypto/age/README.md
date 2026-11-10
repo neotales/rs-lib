@@ -59,15 +59,9 @@ native and hybrid keys, SSH keys, passphrases, the binary payload and the ASCII
 armor, plus parser limits and the identity and recipient syntax the reference
 tool's own test cases cover.
 
-**Interoperation with a reference implementation is tested, in both directions.**
-A container written here is decrypted by `rage`, and a container written by
-`rage` is decrypted here, for both the binary form and the ASCII armor, on all
-three platforms. The tool version is pinned in the area README.
+Interoperation with `rage` is not run by this pipeline. The tests in `tests/interop.rs` are ignored. They need the reference CLI, and this repository does not install it.
 
-**Fuzzing does not run.** The area README names a fuzzing lane over every parser
-and there is no fuzz target in this repository. The parsers are bounded — they
-enforce size limits and reject rather than allocate without bound — but bounded
-is not the same as fuzzed, and the distinction is worth keeping.
+Fuzzing does not run. There is no fuzz target in this repository. The parsers enforce size limits and reject rather than allocate without bound. Bounded is not the same as fuzzed.
 
 ## Licence
 
