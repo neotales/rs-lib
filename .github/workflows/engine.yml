@@ -4,6 +4,7 @@ name: engine
 # Today that is neotales-docker.
 
 on:
+  workflow_dispatch:
   push:
     branches: [dev]
     paths:

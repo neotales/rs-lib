@@ -587,6 +587,34 @@ impl DockerClient {
 
     /// Creates a network from repository-owned options.
     ///
+    /// # Examples
+    ///
+    /// This example does not create a network because nothing is listening at
+    /// the configured address.
+    ///
+    /// ```
+    /// use neotales_docker::{DockerClient, NetworkCreateOptions};
+    ///
+    /// let runtime = tokio::runtime::Builder::new_current_thread()
+    ///     .enable_all()
+    ///     .build()
+    ///     .expect("runtime");
+    /// runtime.block_on(async {
+    ///     let client = DockerClient::connect_http("http://127.0.0.1:1")?;
+    ///     let created = client
+    ///         .create_network(NetworkCreateOptions::new("docs-example"))
+    ///         .await;
+    ///     // Nothing is listening, so this does not create a network.
+    ///     // A successful create is removed by id. Drop does not remove it.
+    ///     if let Ok(network) = &created {
+    ///         client.remove_network(&network.id).await?;
+    ///     }
+    ///     assert!(created.is_err());
+    ///     Ok::<(), neotales_docker::Error>(())
+    /// })
+    /// .expect("example completes");
+    /// ```
+    ///
     /// # Errors
     ///
     /// Returns a repository error for serialization, transport, or response
