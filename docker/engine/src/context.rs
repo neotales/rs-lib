@@ -679,6 +679,13 @@ impl ContextResolver {
         }))
     }
 
+    #[cfg_attr(
+        windows,
+        allow(
+            clippy::unused_self,
+            reason = "the Windows default pipe does not read the resolver; the unix body does"
+        )
+    )]
     fn platform_default(&self) -> Endpoint {
         #[cfg(windows)]
         {

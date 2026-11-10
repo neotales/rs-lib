@@ -499,6 +499,13 @@ pub(crate) fn write_config_object(
     Ok(())
 }
 
+#[cfg_attr(
+    not(unix),
+    allow(
+        clippy::unnecessary_wraps,
+        reason = "Windows has no mode bits; the Result stays so the unix body and its callers share one signature"
+    )
+)]
 fn set_unix_mode(path: &Path, mode: u32) -> Result<(), DockerConfigError> {
     #[cfg(unix)]
     {

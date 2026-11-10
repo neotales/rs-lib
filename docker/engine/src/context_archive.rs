@@ -2119,6 +2119,13 @@ fn write_new_file(path: &Path, bytes: &[u8], mode: u32) -> Result<(), ContextArc
     set_unix_mode(path, mode)
 }
 
+#[cfg_attr(
+    not(unix),
+    allow(
+        clippy::unnecessary_wraps,
+        reason = "Windows has no mode bits; the Result stays so the unix body and its callers share one signature"
+    )
+)]
 fn set_unix_mode(path: &Path, mode: u32) -> Result<(), ContextArchiveError> {
     #[cfg(unix)]
     {
@@ -2131,6 +2138,13 @@ fn set_unix_mode(path: &Path, mode: u32) -> Result<(), ContextArchiveError> {
     Ok(())
 }
 
+#[cfg_attr(
+    not(unix),
+    allow(
+        clippy::unnecessary_wraps,
+        reason = "Windows has no link count; the Result stays so the unix body and its callers share one signature"
+    )
+)]
 fn reject_hard_link(metadata: &fs::Metadata, entry: &str) -> Result<(), ContextArchiveError> {
     #[cfg(unix)]
     {
