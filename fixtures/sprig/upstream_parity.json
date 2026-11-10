@@ -1,0 +1,1111 @@
+[
+ {
+  "template": "{{ $d := dict \"a\" (dict \"b\" (dict \"c\" 1)) }}{{ dig \"a\" \"b\" \"z\" \"fallback\" $d }}",
+  "expected": "fallback"
+ },
+ {
+  "template": "{{ $d := dict \"a\" 1 \"b\" 2 }}{{ values $d | sortAlpha | join \",\" }}",
+  "expected": "1,2"
+ },
+ {
+  "template": "{{ $d := dict \"key\" \"old\" }}{{ get (mustMerge $d (dict \"next\" \"new\")) \"next\" }}",
+  "expected": "new"
+ },
+ {
+  "template": "{{ $d := dict \"key\" \"value\" }}{{ get (mustDeepCopy $d) \"key\" }}",
+  "expected": "value"
+ },
+ {
+  "template": "{{ $d := dict \"one\" 1 \"two\" 2 }}{{ pick $d \"two\" | len }}|{{ omit $d \"one\" | len }}|{{ get $d \"missing\" }}",
+  "expected": "1|1|"
+ },
+ {
+  "template": "{{ $items := list \"a\" \"b\" \"a\" }}{{ has \"b\" $items }}|{{ without $items \"a\" }}",
+  "expected": "true|[b]"
+ },
+ {
+  "template": "{{ $items := list \"a\" \"b\" \"c\" \"d\" \"e\" }}{{ chunk 2 $items }}",
+  "expected": "[[a b] [c d] [e]]"
+ },
+ {
+  "template": "{{ $items := list \"a\" \"b\" \"c\" }}{{ append $items \"d\" | join \"-\" }}",
+  "expected": "a-b-c-d"
+ },
+ {
+  "template": "{{ $items := list \"a\" \"b\" \"c\" }}{{ prepend $items \"z\" | join \"-\" }}",
+  "expected": "z-a-b-c"
+ },
+ {
+  "template": "{{ $items := list \"a\" \"b\" \"c\" }}{{ slice $items 1 3 }}",
+  "expected": "[b c]"
+ },
+ {
+  "template": "{{ $items := list \"a\" \"b\" \"c\" }}{{ slice $items }}",
+  "expected": "[a b c]"
+ },
+ {
+  "template": "{{ $items := regexSplit \"/\" \"foo/bar/baz\" -1 }}{{ mustAppend $items \"qux\" | join \"-\" }}",
+  "expected": "foo-bar-baz-qux"
+ },
+ {
+  "template": "{{ $items := tuple 1 \"a\" \"foo\" }}{{ index $items 2 }}{{ index $items 0 }}{{ index $items 1 }}",
+  "expected": "foo1a"
+ },
+ {
+  "template": "{{ $items := tuple 1 2 3 4 }}{{ prepend $items 0 | join \"-\" }}",
+  "expected": "0-1-2-3-4"
+ },
+ {
+  "template": "{{ $items := tuple 1 2 3 }}{{ append $items 4 | len }}",
+  "expected": "4"
+ },
+ {
+  "template": "{{ $target := dict }}{{ $one := dict \"foo\" (dict \"bar\" \"baz\") \"qux\" true }}{{ $two := dict \"foo\" (dict \"bar\" \"baz2\") \"qux\" false }}{{ deepCopy $one | mergeOverwrite $target | toString | trunc 0 }}{{ $_ := mergeOverwrite $target $two }}{{ $one }}",
+  "expected": "map[foo:map[bar:baz] qux:true]"
+ },
+ {
+  "template": "{{ $url := dict \"fragment\" \"fragment\" \"host\" \"host:80\" \"path\" \"/path\" \"query\" \"query\" \"scheme\" \"proto\" }}{{ urlJoin $url }}",
+  "expected": "proto://host:80/path?query#fragment"
+ },
+ {
+  "template": "{{ $url := dict \"fragment\" \"fragment\" \"host\" \"host:80\" \"path\" \"/path\" \"scheme\" \"proto\" \"userinfo\" \"auth\" }}{{ urlJoin $url }}",
+  "expected": "proto://auth@host:80/path#fragment"
+ },
+ {
+  "template": "{{ $url := urlParse \"proto://auth@host:80/path?query#fragment\" }}{{ $url.host }}",
+  "expected": "host:80"
+ },
+ {
+  "template": "{{ $url := urlParse \"proto://auth@host:80/path?query#fragment\" }}{{ $url.hostname }}",
+  "expected": "host"
+ },
+ {
+  "template": "{{ $url := urlParse \"proto://auth@host:80/path?query#fragment\" }}{{ $url.userinfo }}",
+  "expected": "auth"
+ },
+ {
+  "template": "{{ $value := add 1 2 }}{{ kindOf $value }}",
+  "expected": "int"
+ },
+ {
+  "template": "{{ $value := addf 1.0 2.0 }}{{ kindOf $value }}",
+  "expected": "float64"
+ },
+ {
+  "template": "{{ $value := dict \"one\" \"1\" }}{{ kindIs \"map\" $value }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ $value := dict \"one\" \"1\" }}{{ kindOf $value }}",
+  "expected": "map"
+ },
+ {
+  "template": "{{ $value := list \"one\" }}{{ kindOf $value }}",
+  "expected": "slice"
+ },
+ {
+  "template": "{{ $value := list \"one\" }}{{ typeIsLike \"slice\" $value }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ $values := \"foo$bar$baz\" | split \"$\" }}{{ $values._0 }}",
+  "expected": "foo"
+ },
+ {
+  "template": "{{ $values := \"foo$bar$baz\" | splitn \"$\" 2 }}{{ $values._1 }}",
+  "expected": "bar$baz"
+ },
+ {
+  "template": "{{ $version := semver \"1.2.3-beta.1+c0ff33\" }}{{ $version.Major }}",
+  "expected": "1"
+ },
+ {
+  "template": "{{ $version := semver \"1.2.3-beta.1+c0ff33\" }}{{ $version.Prerelease }}",
+  "expected": "beta.1"
+ },
+ {
+  "template": "{{ .items | reverse }}",
+  "expected": "[gamma beta alpha]"
+ },
+ {
+  "template": "{{ .value | lower }}",
+  "expected": "n\u00e9o",
+  "value": "N\u00c9O"
+ },
+ {
+  "template": "{{ .value | trim }}",
+  "expected": "neo",
+  "value": "  neo  "
+ },
+ {
+  "template": "{{ .value | upper }}",
+  "expected": "N\u00c9O",
+  "value": "n\u00e9o"
+ },
+ {
+  "template": "{{ 0o10 }}",
+  "expected": "8"
+ },
+ {
+  "template": "{{ 0x10 }}",
+  "expected": "16"
+ },
+ {
+  "template": "{{ abbrev 3 \"hello world\" }}",
+  "expected": "hello world"
+ },
+ {
+  "template": "{{ abbrev 5 \"sprig functions\" }}",
+  "expected": "sp..."
+ },
+ {
+  "template": "{{ abbrevboth 0 3 \"hello world\" }}",
+  "expected": "hello world"
+ },
+ {
+  "template": "{{ abbrevboth 1 6 \"hello world\" }}",
+  "expected": "hello world"
+ },
+ {
+  "template": "{{ abbrevboth 5 10 \"1234 5678 9123\" }}",
+  "expected": "...5678..."
+ },
+ {
+  "template": "{{ add 1 2 3 }}",
+  "expected": "6"
+ },
+ {
+  "template": "{{ add 2 3 }}",
+  "expected": "5"
+ },
+ {
+  "template": "{{ add1 3 }}",
+  "expected": "4"
+ },
+ {
+  "template": "{{ add1f 3.4 }}",
+  "expected": "4.4"
+ },
+ {
+  "template": "{{ addf 1.2 2.3 }}",
+  "expected": "3.5"
+ },
+ {
+  "template": "{{ adler32sum \"abc\" }}",
+  "expected": "38600999"
+ },
+ {
+  "template": "{{ all \"a\" \"b\" }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ all }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ any \"\" \"b\" }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ any }}",
+  "expected": "false"
+ },
+ {
+  "template": "{{ atoi \"42\" }}",
+  "expected": "42"
+ },
+ {
+  "template": "{{ b32enc \"foo\" }}",
+  "expected": "MZXW6==="
+ },
+ {
+  "template": "{{ b64enc \"neo\" }}",
+  "expected": "bmVv"
+ },
+ {
+  "template": "{{ base \"\" }}",
+  "expected": "."
+ },
+ {
+  "template": "{{ base \"/\" }}",
+  "expected": "/"
+ },
+ {
+  "template": "{{ base \"a/b.txt\" }}",
+  "expected": "b.txt"
+ },
+ {
+  "template": "{{ base \"foo/bar\" }}",
+  "expected": "bar"
+ },
+ {
+  "template": "{{ biggest 1 3 2 }}",
+  "expected": "3"
+ },
+ {
+  "template": "{{ camelcase \"_camel_case\" }}",
+  "expected": "_CamelCase"
+ },
+ {
+  "template": "{{ camelcase \"_complex__case_\" }}",
+  "expected": "_Complex_Case_"
+ },
+ {
+  "template": "{{ camelcase \"neo_sprig\" }}",
+  "expected": "NeoSprig"
+ },
+ {
+  "template": "{{ ceil 1.2 }}",
+  "expected": "2"
+ },
+ {
+  "template": "{{ clean \"/foo/../foo/../bar\" }}",
+  "expected": "/bar"
+ },
+ {
+  "template": "{{ clean \"a/./b/../c\" }}",
+  "expected": "a/c"
+ },
+ {
+  "template": "{{ coalesce \"\" \"\" \"value\" }}",
+  "expected": "value"
+ },
+ {
+  "template": "{{ coalesce }}",
+  "expected": "<no value>"
+ },
+ {
+  "template": "{{ concat (list 1 2 3) (list 4 5) (list (list \"foo\")) }}",
+  "expected": "[1 2 3 4 5 [foo]]"
+ },
+ {
+  "template": "{{ concat (list 1 2) (list 3 4) }}",
+  "expected": "[1 2 3 4]"
+ },
+ {
+  "template": "{{ contains \"neo\" .value }}",
+  "expected": "true",
+  "value": "neoenv"
+ },
+ {
+  "template": "{{ contains .value }}",
+  "expected": "safe Sprig helper contains expects 2 arguments, received 1"
+ },
+ {
+  "template": "{{ dateInZone \"2006-01-02\" \"2019-06-13T20:39:39Z\" \"UTC\" }}",
+  "expected": "2019-06-13"
+ },
+ {
+  "template": "{{ date_in_zone \"02 Jan 06 15:04 -0700\" \"2019-06-13T20:39:39Z\" \"UTC\" }}",
+  "expected": "13 Jun 19 20:39 +00:00"
+ },
+ {
+  "template": "{{ date_in_zone \"02 Jan 06 15:04 -0700\" \"2019-06-13T20:39:39Z\" \"foobar\" }}",
+  "expected": "13 Jun 19 20:39 +00:00"
+ },
+ {
+  "template": "{{ date_modify \"24h\" \"2019-06-13T20:39:39Z\" }}",
+  "expected": "2019-06-14T20:39:39.0000000+00:00"
+ },
+ {
+  "template": "{{ deepEqual (list 1 2) (list 1 2) }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ default \"fallback\" \"\" }}",
+  "expected": "fallback"
+ },
+ {
+  "template": "{{ default \"fallback\" \"value\" \"ignored\" }}",
+  "expected": "value"
+ },
+ {
+  "template": "{{ default \"fallback\" (trim \" \") }}",
+  "expected": "fallback"
+ },
+ {
+  "template": "{{ default \"fallback\" .value }}",
+  "expected": "fallback",
+  "value": ""
+ },
+ {
+  "template": "{{ default \"fallback\" 234 }}",
+  "expected": "234"
+ },
+ {
+  "template": "{{ default \"fallback\" }}",
+  "expected": "fallback"
+ },
+ {
+  "template": "{{ dict \"name\" \"neo\" | get \"name\" }}",
+  "expected": "neo"
+ },
+ {
+  "template": "{{ dir \"foo//bar\" }}",
+  "expected": "foo"
+ },
+ {
+  "template": "{{ dir \"foo/bar/baz\" }}",
+  "expected": "foo/bar"
+ },
+ {
+  "template": "{{ div 9 2 }}",
+  "expected": "4"
+ },
+ {
+  "template": "{{ divf 7 2 }}",
+  "expected": "3.5"
+ },
+ {
+  "template": "{{ duration \"61\" }}",
+  "expected": "1m1s"
+ },
+ {
+  "template": "{{ duration \"93784\" }}",
+  "expected": "26h3m4s"
+ },
+ {
+  "template": "{{ duration 61 }}",
+  "expected": "1m1s"
+ },
+ {
+  "template": "{{ duration 93784 }}",
+  "expected": "26h3m4s"
+ },
+ {
+  "template": "{{ durationRound \"-2h5s\" }}",
+  "expected": "2h"
+ },
+ {
+  "template": "{{ durationRound \"1s\" }}",
+  "expected": "0s"
+ },
+ {
+  "template": "{{ durationRound \"2400h5s\" }}",
+  "expected": "3mo"
+ },
+ {
+  "template": "{{ durationRound \"24h\" }}",
+  "expected": "24h"
+ },
+ {
+  "template": "{{ durationRound \"24h5s\" }}",
+  "expected": "1d"
+ },
+ {
+  "template": "{{ durationRound \"2h5s\" }}",
+  "expected": "2h"
+ },
+ {
+  "template": "{{ durationRound \"invalid\" }}",
+  "expected": "0s"
+ },
+ {
+  "template": "{{ durationRound 10000000000 }}",
+  "expected": "10s"
+ },
+ {
+  "template": "{{ empty \"\" }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ empty 0 }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ empty 0x0 }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ empty 1 }}",
+  "expected": "false"
+ },
+ {
+  "template": "{{ empty false }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ ext \".env\" }}",
+  "expected": ".env"
+ },
+ {
+  "template": "{{ ext \"/foo/bar/baz.txt\" }}",
+  "expected": ".txt"
+ },
+ {
+  "template": "{{ ext \"a/b.txt\" }}",
+  "expected": ".txt"
+ },
+ {
+  "template": "{{ float64 true }}",
+  "expected": "1"
+ },
+ {
+  "template": "{{ floor 1.8 }}",
+  "expected": "1"
+ },
+ {
+  "template": "{{ fromJson \"[1,2]\" | toJson }}",
+  "expected": "[1,2]"
+ },
+ {
+  "template": "{{ fromJson \"not json\" }}",
+  "expected": ""
+ },
+ {
+  "template": "{{ hasPrefix \"cat\" \"catch\" }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ hasSuffix \"cat\" \"bobcat\" }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ htmlDate \"2019-06-13T20:39:39Z\" }}",
+  "expected": "2019-06-13"
+ },
+ {
+  "template": "{{ htmlDateInZone \"2019-06-13T20:39:39Z\" \"UTC\" }}",
+  "expected": "2019-06-13"
+ },
+ {
+  "template": "{{ indent 2 \"a\\nb\" }}",
+  "expected": "  a\n  b"
+ },
+ {
+  "template": "{{ initials \"First Try\" }}",
+  "expected": "FT"
+ },
+ {
+  "template": "{{ int 102.9 }}",
+  "expected": "102"
+ },
+ {
+  "template": "{{ int true }}",
+  "expected": "1"
+ },
+ {
+  "template": "{{ int64 42 }}",
+  "expected": "42"
+ },
+ {
+  "template": "{{ isAbs \"/foo\" }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ isAbs \"foo\" }}",
+  "expected": "false"
+ },
+ {
+  "template": "{{ kebabcase \"GO_PATH\" }}",
+  "expected": "go-path"
+ },
+ {
+  "template": "{{ kebabcase \"NeoSprig\" }}",
+  "expected": "neo-sprig"
+ },
+ {
+  "template": "{{ kindIs \"string\" \"text\" }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ kindOf \"text\" }}",
+  "expected": "string"
+ },
+ {
+  "template": "{{ kindOf 4.2 }}",
+  "expected": "float64"
+ },
+ {
+  "template": "{{ kindOf 42 }}",
+  "expected": "int"
+ },
+ {
+  "template": "{{ kindOf true }}",
+  "expected": "bool"
+ },
+ {
+  "template": "{{ len \"two\" | plural \"1 char\" \"chars\" }}",
+  "expected": "chars"
+ },
+ {
+  "template": "{{ list \"a\" \"b\" \"a\" | uniq }}",
+  "expected": "[a b]"
+ },
+ {
+  "template": "{{ list \"a\" \"b\" \"a\" | without \"a\" }}",
+  "expected": "[b]"
+ },
+ {
+  "template": "{{ list \"a\" \"b\" \"c\" | initial }}",
+  "expected": "[a b]"
+ },
+ {
+  "template": "{{ list \"a\" \"b\" \"c\" | rest }}",
+  "expected": "[b c]"
+ },
+ {
+  "template": "{{ list \"a\" \"b\" | first }}",
+  "expected": "a"
+ },
+ {
+  "template": "{{ list \"a\" \"b\" | last }}",
+  "expected": "b"
+ },
+ {
+  "template": "{{ list 1 0 \"\" \"hello\" | compact }}",
+  "expected": "[1 hello]"
+ },
+ {
+  "template": "{{ list 1 0 | mustCompact }}",
+  "expected": "[1]"
+ },
+ {
+  "template": "{{ list 1 1 1 2 2 | uniq }}",
+  "expected": "[1 2]"
+ },
+ {
+  "template": "{{ max 1 3 2 }}",
+  "expected": "3"
+ },
+ {
+  "template": "{{ max 2 8 3 }}",
+  "expected": "8"
+ },
+ {
+  "template": "{{ maxf 1.4 2 3 }}",
+  "expected": "3"
+ },
+ {
+  "template": "{{ min 1 3 2 }}",
+  "expected": "1"
+ },
+ {
+  "template": "{{ min 2 8 3 }}",
+  "expected": "2"
+ },
+ {
+  "template": "{{ minf 1.4 2 3 }}",
+  "expected": "1.4"
+ },
+ {
+  "template": "{{ mod 9 2 }}",
+  "expected": "1"
+ },
+ {
+  "template": "{{ mul 2 3 4 }}",
+  "expected": "24"
+ },
+ {
+  "template": "{{ mulf 1.5 2 }}",
+  "expected": "3.0"
+ },
+ {
+  "template": "{{ mustFirst (list 1 2) }}",
+  "expected": "1"
+ },
+ {
+  "template": "{{ mustHas 1 (list 1 2) }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ mustInitial (list 1 2) }}",
+  "expected": "[1]"
+ },
+ {
+  "template": "{{ mustLast (list 1 2) }}",
+  "expected": "2"
+ },
+ {
+  "template": "{{ mustPrepend (list 2) 1 }}",
+  "expected": "[1 2]"
+ },
+ {
+  "template": "{{ mustPush (list 1) 2 }}",
+  "expected": "[1 2]"
+ },
+ {
+  "template": "{{ mustRegexFind \"[0-9]+\" \"neo42\" }}",
+  "expected": "42"
+ },
+ {
+  "template": "{{ mustRegexFindAll \"a\" \"banana\" -1 }}",
+  "expected": "[a a a]"
+ },
+ {
+  "template": "{{ mustRegexReplaceAll \"a\" \"x\" \"banana\" }}",
+  "expected": "bxnxnx"
+ },
+ {
+  "template": "{{ mustRegexSplit \"a\" \"banana\" -1 }}",
+  "expected": "[b n n ]"
+ },
+ {
+  "template": "{{ mustRest (list 1 2) }}",
+  "expected": "[2]"
+ },
+ {
+  "template": "{{ mustReverse (list 1 2) }}",
+  "expected": "[2 1]"
+ },
+ {
+  "template": "{{ mustSlice (regexSplit \"/\" \"foo/bar/baz\" -1) 1 2 }}",
+  "expected": "[bar]"
+ },
+ {
+  "template": "{{ mustToJson (dict \"key\" \"value\") }}",
+  "expected": "{\"key\":\"value\"}"
+ },
+ {
+  "template": "{{ mustToPrettyJson (dict \"key\" \"value\") }}",
+  "expected": "{\n  \"key\": \"value\"\n}"
+ },
+ {
+  "template": "{{ mustToRawJson (dict \"key\" \"value\") }}",
+  "expected": "{\"key\":\"value\"}"
+ },
+ {
+  "template": "{{ mustUniq (list 1 1 2) }}",
+  "expected": "[1 2]"
+ },
+ {
+  "template": "{{ mustWithout (list 1 2 3) }}",
+  "expected": "[1 2 3]"
+ },
+ {
+  "template": "{{ must_date_modify \"1h\" \"2019-06-13T20:39:39Z\" }}",
+  "expected": "2019-06-13T21:39:39.0000000+00:00"
+ },
+ {
+  "template": "{{ nindent 2 \"a\\nb\" }}",
+  "expected": "\n  a\n  b"
+ },
+ {
+  "template": "{{ nospace \"h e l l o \" }}",
+  "expected": "hello"
+ },
+ {
+  "template": "{{ osBase \"foo/bar\" }}",
+  "expected": "bar"
+ },
+ {
+  "template": "{{ osClean \"/foo/../foo/../bar\" }}",
+  "expected": "/bar"
+ },
+ {
+  "template": "{{ osDir \"foo/bar/baz\" }}",
+  "expected": "foo/bar"
+ },
+ {
+  "template": "{{ osExt \"/foo/bar/baz.txt\" }}",
+  "expected": ".txt"
+ },
+ {
+  "template": "{{ osIsAbs \"/foo\" }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ osIsAbs \"foo\" }}",
+  "expected": "false"
+ },
+ {
+  "template": "{{ plural \"item\" \"items\" 1 }}",
+  "expected": "item"
+ },
+ {
+  "template": "{{ plural \"item\" \"items\" 2 }}",
+  "expected": "items"
+ },
+ {
+  "template": "{{ push (list 1) 2 }}",
+  "expected": "[1 2]"
+ },
+ {
+  "template": "{{ quote \"a\" \"b\" \"c\" }}",
+  "expected": "\"a\" \"b\" \"c\""
+ },
+ {
+  "template": "{{ range $i, $e := until 5 }}{{ $i }}{{ $e }}{{ end }}",
+  "expected": "0011223344"
+ },
+ {
+  "template": "{{ range $i, $e := untilStep 0 -10 -2 }}{{ $i }}{{ $e }} {{ end }}",
+  "expected": "00 1-2 2-4 3-6 4-8 "
+ },
+ {
+  "template": "{{ range $index, $value := until 5 }}{{ $index }}{{ $value }}{{ end }}",
+  "expected": "0011223344"
+ },
+ {
+  "template": "{{ range $index, $value := untilStep 0 -10 -2 }}{{ $index }}{{ $value }} {{ end }}",
+  "expected": "00 1-2 2-4 3-6 4-8 "
+ },
+ {
+  "template": "{{ range (tuple 1 2 3 4 5 6 7 8 | mustChunk 3) }}{{ . | join \"-\" }}|{{ end }}",
+  "expected": "1-2-3|4-5-6|7-8|"
+ },
+ {
+  "template": "{{ regexFind \"[0-9]+\" \"neo42\" }}",
+  "expected": "42"
+ },
+ {
+  "template": "{{ regexFindAll \"[0-9]\" \"n1e2o3\" -1 }}",
+  "expected": "[1 2 3]"
+ },
+ {
+  "template": "{{ regexMatch \"^neo\" \"neo-sprig\" }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ regexQuoteMeta \"1.2.3\" }}",
+  "expected": "1\\.2\\.3"
+ },
+ {
+  "template": "{{ regexQuoteMeta \"[value]\" }}",
+  "expected": "\\[value\\]"
+ },
+ {
+  "template": "{{ regexReplaceAll \"-\" \"#\" .value }}",
+  "expected": "neo#env"
+ },
+ {
+  "template": "{{ regexReplaceAll \"a(x*)b\" \"$1\" \"-ab-axxb-\" }}",
+  "expected": "--xx-"
+ },
+ {
+  "template": "{{ regexReplaceAll \"a(x*)b\" \"$1W\" \"-ab-axxb-\" }}",
+  "expected": "---"
+ },
+ {
+  "template": "{{ regexReplaceAll \"a(x*)b\" \"${1}W\" \"-ab-axxb-\" }}",
+  "expected": "-W-xxW-"
+ },
+ {
+  "template": "{{ regexReplaceAll \"a(x*)b\" \"T\" \"-ab-axxb-\" }}",
+  "expected": "-T-T-"
+ },
+ {
+  "template": "{{ regexReplaceAllLiteral \"a(x*)b\" \"$1\" \"-ab-axxb-\" }}",
+  "expected": "-$1-$1-"
+ },
+ {
+  "template": "{{ regexSplit \"-\" \"neo-sprig\" -1 }}",
+  "expected": "[neo sprig]"
+ },
+ {
+  "template": "{{ regexSplit \"a\" \"banana\" 0 }}",
+  "expected": "[]"
+ },
+ {
+  "template": "{{ regexSplit \"a\" \"banana\" 2 }}",
+  "expected": "[b nana]"
+ },
+ {
+  "template": "{{ repeat 3 \"go\" }}",
+  "expected": "gogogo"
+ },
+ {
+  "template": "{{ replace \"x\" \"y\" \"xoxo\" }}",
+  "expected": "yoyo"
+ },
+ {
+  "template": "{{ round 1.5 0 }}",
+  "expected": "2"
+ },
+ {
+  "template": "{{ round 123.2329999 2 0.3 }}",
+  "expected": "123.23"
+ },
+ {
+  "template": "{{ round 123.233 2 0.3 }}",
+  "expected": "123.24"
+ },
+ {
+  "template": "{{ semver \"1.2.3\" | (semver \"1.3.3\").Compare }}",
+  "expected": "1"
+ },
+ {
+  "template": "{{ semverCompare \"1.2.3 - 2.3.4\" \"2.3.4\" }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ semverCompare \"1.2.x\" \"1.2.9\" }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ semverCompare \"1.2.x\" \"1.3.0\" }}",
+  "expected": "false"
+ },
+ {
+  "template": "{{ semverCompare \">=1.2.0\" \"1.3.0\" }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ semverCompare \">=1.2.3 <2.0.0 || >=3.0.0\" \"3.1.0\" }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ semverCompare \"^0.2.3\" \"0.3.0\" }}",
+  "expected": "false"
+ },
+ {
+  "template": "{{ semverCompare \"^1.2.0\" \"1.2.3\" }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ semverCompare \"^1.2.0\" \"2.2.3\" }}",
+  "expected": "false"
+ },
+ {
+  "template": "{{ semverCompare \"~1.2.0\" \"1.2.9\" }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ semverCompare \"~1.2.0\" \"1.3.0\" }}",
+  "expected": "false"
+ },
+ {
+  "template": "{{ seq -5 }}",
+  "expected": "1 0 -1 -2 -3 -4 -5"
+ },
+ {
+  "template": "{{ seq 0 -4 }}",
+  "expected": "0 -1 -2 -3 -4"
+ },
+ {
+  "template": "{{ seq 0 1 2 3 }}",
+  "expected": ""
+ },
+ {
+  "template": "{{ seq 0 1 3 }}",
+  "expected": "0 1 2 3"
+ },
+ {
+  "template": "{{ seq 0 3 10 }}",
+  "expected": "0 3 6 9"
+ },
+ {
+  "template": "{{ seq 0 }}",
+  "expected": "1 0"
+ },
+ {
+  "template": "{{ seq 2 2 6 }}",
+  "expected": "2 4 6"
+ },
+ {
+  "template": "{{ seq 3 -3 2 }}",
+  "expected": "3"
+ },
+ {
+  "template": "{{ seq 3 3 2 }}",
+  "expected": ""
+ },
+ {
+  "template": "{{ seq 3 }}",
+  "expected": "1 2 3"
+ },
+ {
+  "template": "{{ seq }}",
+  "expected": ""
+ },
+ {
+  "template": "{{ sha1sum \"abc\" }}",
+  "expected": "a9993e364706816aba3e25717850c26c9cd0d89d"
+ },
+ {
+  "template": "{{ sha1sum \"neo\" }}",
+  "expected": "66b9283dcf8a7d913f04ead72e559c727d9f1d82"
+ },
+ {
+  "template": "{{ sha256sum \"abc\" }}",
+  "expected": "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+ },
+ {
+  "template": "{{ sha256sum .value }}",
+  "expected": "7bc84fb1cd2f2f9fc37003fa204e906ad0b23130e2b56914073dc13e4e1ab540"
+ },
+ {
+  "template": "{{ sha512sum \"abc\" }}",
+  "expected": "ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f"
+ },
+ {
+  "template": "{{ snakecase \"HTTPServer\" }}",
+  "expected": "http_server"
+ },
+ {
+  "template": "{{ snakecase \"NeoSprig\" }}",
+  "expected": "neo_sprig"
+ },
+ {
+  "template": "{{ snakecase \"NoHTTPS\" }}",
+  "expected": "no_https"
+ },
+ {
+  "template": "{{ splitList \"-\" \"neo-sprig\" | join \"/\" }}",
+  "expected": "neo/sprig"
+ },
+ {
+  "template": "{{ splitList \"-\" .value }}",
+  "expected": "[neo env]"
+ },
+ {
+  "template": "{{ squote \"a\" \"b\" \"c\" }}",
+  "expected": "'a' 'b' 'c'"
+ },
+ {
+  "template": "{{ sub 10 3 }}",
+  "expected": "7"
+ },
+ {
+  "template": "{{ subf 5 1.5 }}",
+  "expected": "3.5"
+ },
+ {
+  "template": "{{ substr -1 3 \"fooo\" }}",
+  "expected": "foo"
+ },
+ {
+  "template": "{{ substr 1 -1 \"fooo\" }}",
+  "expected": "ooo"
+ },
+ {
+  "template": "{{ substr 1 10 \"fooo\" }}",
+  "expected": "ooo"
+ },
+ {
+  "template": "{{ substr 1 4 \"sprig\" }}",
+  "expected": "pri"
+ },
+ {
+  "template": "{{ swapcase \"Hello\" }}",
+  "expected": "hELLO"
+ },
+ {
+  "template": "{{ ternary \"yes\" \"no\" true }}",
+  "expected": "yes"
+ },
+ {
+  "template": "{{ toDate \"2006-01-02\" \"2017-12-31\" | date \"02/01/2006\" }}",
+  "expected": "31/12/2017"
+ },
+ {
+  "template": "{{ toDecimal \"0755\" }}",
+  "expected": "493"
+ },
+ {
+  "template": "{{ toDecimal \"777\" }}",
+  "expected": "511"
+ },
+ {
+  "template": "{{ toDecimal \"not-octal\" }}",
+  "expected": "0"
+ },
+ {
+  "template": "{{ toPrettyJson (dict \"key\" \"value\") }}",
+  "expected": "{\n  \"key\": \"value\"\n}"
+ },
+ {
+  "template": "{{ trim .value \"extra\" }}",
+  "expected": "safe Sprig helper trim expects 1 arguments, received 2"
+ },
+ {
+  "template": "{{ trimAll \"-\" \"--neo--\" }}",
+  "expected": "neo"
+ },
+ {
+  "template": "{{ trimPrefix \"neo-\" \"neo-sprig\" }}",
+  "expected": "sprig"
+ },
+ {
+  "template": "{{ trimSuffix \"-sprig\" \"neo-sprig\" }}",
+  "expected": "neo"
+ },
+ {
+  "template": "{{ trimall \"$\" \"$value$\" }}",
+  "expected": "value"
+ },
+ {
+  "template": "{{ trunc -3 \"sprig\" }}",
+  "expected": "rig"
+ },
+ {
+  "template": "{{ tuple 1 2 3 4 5 6 7 | chunk 3 | len }}",
+  "expected": "3"
+ },
+ {
+  "template": "{{ tuple 1 2 3 | initial | last }}",
+  "expected": "2"
+ },
+ {
+  "template": "{{ tuple 1 2 3 | rest | first }}",
+  "expected": "2"
+ },
+ {
+  "template": "{{ tuple 1 2 3 | reverse | first }}",
+  "expected": "3"
+ },
+ {
+  "template": "{{ typeIs \"bool\" true }}",
+  "expected": "true"
+ },
+ {
+  "template": "{{ typeOf \"text\" }}",
+  "expected": "string"
+ },
+ {
+  "template": "{{ typeOf (list \"value\") }}|{{ kindOf (list \"value\") }}",
+  "expected": "slice|slice"
+ },
+ {
+  "template": "{{ unixEpoch \"2019-06-13T20:39:39Z\" }}",
+  "expected": "1560458379"
+ },
+ {
+  "template": "{{ until -3 }}",
+  "expected": "[0 -1 -2]"
+ },
+ {
+  "template": "{{ until 3 }}",
+  "expected": "[0 1 2]"
+ },
+ {
+  "template": "{{ until 5 }}",
+  "expected": "[0 1 2 3 4]"
+ },
+ {
+  "template": "{{ untilStep 1 6 2 }}",
+  "expected": "[1 3 5]"
+ },
+ {
+  "template": "{{ untilStep 3 6 2 }}",
+  "expected": "[3 5]"
+ },
+ {
+  "template": "{{ untilStep 3 99 0 }}",
+  "expected": "[]"
+ },
+ {
+  "template": "{{ untitle \"First Try\" }}",
+  "expected": "first try"
+ },
+ {
+  "template": "{{ upper (trim \" go \" | repeat 2) }}",
+  "expected": "GOGO"
+ },
+ {
+  "template": "{{ urlJoin (urlParse \"proto://host:80/pa%20th?key=val%20ue\") }}",
+  "expected": "proto://host:80/pa%20th?key=val%20ue"
+ },
+ {
+  "template": "{{ without (list 1 1 2) 1 }}",
+  "expected": "[2]"
+ },
+ {
+  "template": "{{ wrap 5 \"Hello World\" }}",
+  "expected": "Hello\nWorld"
+ },
+ {
+  "template": "{{ wrapWith 5 \"\\t\" \"Hello World\" }}",
+  "expected": "Hello\tWorld"
+ }
+]

@@ -1,13 +1,16 @@
 name: templates
 
 # The templates pipeline. It builds only this group, never the workspace.
-# Today that is neotales-sprig.
+# Today that is neotales-sprig and neotales-gotmpl.
 
 on:
   push:
     branches: [dev]
     paths:
       - "templates/sprig/**"
+      - "templates/gotmpl/**"
+      - "fixtures/gotmpl/**"
+      - "fixtures/sprig/**"
       - "Cargo.toml"
       - "Cargo.lock"
       - "rust-toolchain.toml"
@@ -17,6 +20,9 @@ on:
   pull_request:
     paths:
       - "templates/sprig/**"
+      - "templates/gotmpl/**"
+      - "fixtures/gotmpl/**"
+      - "fixtures/sprig/**"
       - "Cargo.toml"
       - "Cargo.lock"
       - "rust-toolchain.toml"
@@ -53,18 +59,18 @@ jobs:
           cache-key: templates
 
       - name: Format
-        run: cargo fmt -p neotales-sprig -- --check
+        run: cargo fmt -p neotales-sprig -p neotales-gotmpl -- --check
 
       - name: Clippy
-        run: cargo clippy -p neotales-sprig --all-targets --all-features -- -D warnings
+        run: cargo clippy -p neotales-sprig -p neotales-gotmpl --all-targets --all-features -- -D warnings
 
       - name: Test
-        run: cargo test -p neotales-sprig --all-targets --all-features
+        run: cargo test -p neotales-sprig -p neotales-gotmpl --all-targets --all-features
 
       - name: Documentation
         env:
           RUSTDOCFLAGS: "-D warnings"
-        run: cargo doc -p neotales-sprig --all-features --no-deps
+        run: cargo doc -p neotales-sprig -p neotales-gotmpl --all-features --no-deps
 
   msrv:
     name: msrv
@@ -78,4 +84,4 @@ jobs:
           cache-key: templates-msrv
 
       - name: Test on the pinned compiler
-        run: cargo test -p neotales-sprig --all-targets --all-features
+        run: cargo test -p neotales-sprig -p neotales-gotmpl --all-targets --all-features

@@ -1,0 +1,61 @@
+{
+  "_comment": [
+    "The reference's Sprig registry, split by what this crate does about it.",
+    "",
+    "`not_implemented` is a decision record: a helper belongs there only if",
+    "implementing it would make a rendered Compose file non-reproducible or",
+    "would need a new dependency for something a Compose template has no use",
+    "for. Anything absent from that list and absent from the implementation is a",
+    "gap, and the parity test in neotales-gotmpl reports it.",
+    "",
+    "`implemented_but_not_reproducible` is a different thing: these helpers are",
+    "implemented and work, but they read a clock, so a template that uses one",
+    "renders differently on every run. They are listed separately rather than",
+    "omitted, because a reader deciding whether to use them needs to know they",
+    "are available *and* that they cost reproducibility."
+  ],
+  "not_implemented": {
+    "non_reproducible": {
+      "reason": "reads a random source, so the same inputs would render differently on a rerun; a Compose file must render identically every time",
+      "helpers": [
+        "randAlpha",
+        "randAlphaNum",
+        "randAscii",
+        "randBytes",
+        "randInt",
+        "randNumeric",
+        "uuidv4",
+        "hello",
+        "shuffle"
+      ]
+    },
+    "cryptography": {
+      "reason": "needs a crypto dependency to derive keys or certificates, and nothing in a Compose file needs a private key generated inside a template",
+      "helpers": [
+        "bcrypt",
+        "derivePassword",
+        "htpasswd",
+        "buildCustomCert",
+        "genCA",
+        "genCAWithKey",
+        "genPrivateKey",
+        "genSelfSignedCert",
+        "genSelfSignedCertWithKey",
+        "genSignedCert",
+        "genSignedCertWithKey",
+        "encryptAES",
+        "decryptAES"
+      ]
+    },
+    "network": {
+      "reason": "resolves a host name over the network, which a template render must never do; a Compose file that depends on a DNS answer is not reproducible",
+      "helpers": ["getHostByName"]
+    }
+  },
+  "implemented_but_not_reproducible": {
+    "clock": {
+      "reason": "reads the current time, so a rendered file differs on every run. Supported because refusing the name would break a template written against the reference for no gain, but a Compose file that must render identically on a laptop and in a pipeline should not use these.",
+      "helpers": ["now", "ago"]
+    }
+  }
+}

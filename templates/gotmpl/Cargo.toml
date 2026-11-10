@@ -1,0 +1,26 @@
+[package]
+name = "neotales-gotmpl"
+description = "Pure, safe Go text/template parsing and rendering, re-exporting the Sprig function set"
+version = "0.0.0-alpha.1"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["template", "gotemplate", "helm", "sprig", "go"]
+categories = ["template-engine", "text-processing", "parser-implementations"]
+
+[dependencies]
+# The version is required as well as the path. Cargo ignores the version while the
+# path resolves, so a local build uses the sibling checkout, and the version is
+# what makes this crate publishable. Re-exporting the Sprig set rather than
+# depending on it privately is deliberate: two paths to one set of functions is a
+# way for them to disagree about what a function does.
+neotales-sprig = { path = "../sprig", version = "0.0.0-alpha.1" }
+
+[dev-dependencies]
+serde.workspace = true
+serde_json.workspace = true
+
+[lints]
+workspace = true

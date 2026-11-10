@@ -1,0 +1,627 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "name": "nested_variables",
+      "template": "hello {{ .env.NAME }} on {{ .os }}/{{ .arch }}",
+      "data": {
+        "env": {
+          "NAME": "acme"
+        },
+        "os": "linux",
+        "arch": "x86_64"
+      },
+      "output": "hello acme on linux/x86_64"
+    },
+    {
+      "name": "trim_markers_and_comments",
+      "template": "hello \n {{- .env.NAME -}} \t {{/* ignored */}}!",
+      "data": {
+        "env": {
+          "NAME": "acme"
+        }
+      },
+      "output": "helloacme!"
+    },
+    {
+      "name": "safe_helpers_and_pipeline",
+      "template": "{{ .value | trim | lower | upper | quote }}|{{ default \"fallback\" .empty }}|{{ contains \"Acm\" .value }}",
+      "data": {
+        "value": " Acme ",
+        "empty": ""
+      },
+      "output": "\"ACME\"|fallback|true"
+    },
+    {
+      "name": "default_empty_values",
+      "template": "{{ default \"string-fallback\" .emptyString }}|{{ default \"bool-fallback\" .falseValue }}|{{ default \"list-fallback\" .emptyList }}|{{ default \"map-fallback\" .emptyMap }}",
+      "data": {
+        "emptyString": "",
+        "falseValue": false,
+        "emptyList": [],
+        "emptyMap": {}
+      },
+      "output": "string-fallback|bool-fallback|list-fallback|map-fallback"
+    },
+    {
+      "name": "default_non_string_values",
+      "template": "{{ default \"fallback\" .trueValue }}|{{ default \"fallback\" .nonEmptyList }}|{{ default \"fallback\" .nonEmptyMap }}",
+      "data": {
+        "trueValue": true,
+        "nonEmptyList": [
+          "value"
+        ],
+        "nonEmptyMap": {
+          "key": "value"
+        }
+      },
+      "output": "true|[value]|map[key:value]"
+    },
+    {
+      "name": "quote_control_characters",
+      "template": "{{ quote .value }}",
+      "data": {
+        "value": "\u0000\u0001\u0004\u0007\b\u000b\f\u000e\u001f\u007f\n\r\t"
+      },
+      "output": "\"\\x00\\x01\\x04\\a\\b\\v\\f\\x0e\\x1f\\x7f\\n\\r\\t\""
+    },
+    {
+      "name": "quote_quotes_and_backslashes",
+      "template": "{{ quote .value }}",
+      "data": {
+        "value": "'\"\\path\\n"
+      },
+      "output": "\"'\\\"\\\\path\\\\n\""
+    },
+    {
+      "name": "quote_literal_escape_text",
+      "template": "{{ quote .value }}",
+      "data": {
+        "value": "\\n\\x41\\u263a"
+      },
+      "output": "\"\\\\n\\\\x41\\\\u263a\""
+    },
+    {
+      "name": "quote_decoded_go_escape_inputs",
+      "template": "{{ quote \"\\a\\b\\f\\n\\r\\t\\v\\x04\\u00a0\\U0001004e\\101\" }}",
+      "data": {},
+      "output": "\"\\a\\b\\f\\n\\r\\t\\v\\x04\\u00a0\\U0001004eA\""
+    },
+    {
+      "name": "quote_unicode_and_nonprintable",
+      "template": "{{ quote .value }}",
+      "data": {
+        "value": "\u2603 \u00e9 \ud83d\ude00\u00a0\u2000\u200b\u2028\u0378\ud800\udc4e"
+      },
+      "output": "\"\u2603 \u00e9 \ud83d\ude00\\u00a0\\u2000\\u200b\\u2028\\u0378\\U0001004e\""
+    },
+    {
+      "name": "if_else_truthy",
+      "template": "{{ if .enabled }}enabled{{ else }}disabled{{ end }}",
+      "data": {
+        "enabled": true
+      },
+      "output": "enabled"
+    },
+    {
+      "name": "if_else_falsey",
+      "template": "{{ if .enabled }}enabled{{ else }}disabled{{ end }}",
+      "data": {
+        "enabled": false
+      },
+      "output": "disabled"
+    },
+    {
+      "name": "range_and_with_scope",
+      "template": "{{ range .services }}{{ with .meta }}{{ .name }}={{ .port }};{{ end }}{{ else }}empty{{ end }}",
+      "data": {
+        "services": [
+          {
+            "meta": {
+              "name": "api",
+              "port": "8080"
+            }
+          },
+          {
+            "meta": {
+              "name": "web",
+              "port": "3000"
+            }
+          }
+        ]
+      },
+      "output": "api=8080;web=3000;"
+    },
+    {
+      "name": "empty_range_and_with_retain_outer_dot",
+      "template": "{{ with .config }}bad{{ else }}{{ .name }}{{ end }}:{{ range .items }}bad{{ else }}{{ .name }}{{ end }}",
+      "data": {
+        "name": "acme",
+        "config": "",
+        "items": []
+      },
+      "output": "acme:acme"
+    },
+    {
+      "name": "variables_and_root_scope",
+      "template": "{{ $prefix := .prefix }}{{ range .items }}{{ $prefix }}{{ . }}={{ $.suffix }};{{ end }}",
+      "data": {
+        "prefix": "item-",
+        "suffix": "ok",
+        "items": [
+          "a",
+          "b"
+        ]
+      },
+      "output": "item-a=ok;item-b=ok;"
+    },
+    {
+      "name": "quoted_and_raw_string_escapes",
+      "template": "{{ contains \"neo\\n\" .value }}|{{ contains `raw text` .value }}|{{ contains \"\\u006f\" .value }}",
+      "data": {
+        "value": "neo\nraw text"
+      },
+      "output": "true|true|true"
+    },
+    {
+      "name": "named_nested_templates",
+      "template": "{{ define \"line\" }}{{ .name }}{{ end }}{{ define \"list\" }}{{ range . }}{{ template \"line\" . }};{{ end }}{{ end }}{{ template \"list\" .items }}",
+      "data": {
+        "items": [
+          {
+            "name": "api"
+          },
+          {
+            "name": "web"
+          }
+        ]
+      },
+      "output": "api;web;"
+    },
+    {
+      "name": "ordinal_map_range",
+      "template": "{{ range .labels }}{{ . }};{{ end }}",
+      "data": {
+        "labels": {
+          "z": "last",
+          "a": "first",
+          "m": "middle"
+        }
+      },
+      "output": "first;middle;last;"
+    },
+    {
+      "name": "trim_markers_require_ascii_whitespace",
+      "template": "left \t\n{{- .value -}}\r\n\tright\u00a0",
+      "data": {
+        "value": "x"
+      },
+      "output": "leftxright\u00a0"
+    },
+    {
+      "name": "comment_may_contain_action_delimiters",
+      "template": "a{{/* comment }} and still open */}}b",
+      "data": {},
+      "output": "ab"
+    },
+    {
+      "name": "go_quoted_escape_forms",
+      "template": "{{ contains \"\\x41\\102\\u0043\\U00000044\\n\" .value }}|{{ .value }}|{{ \"\\xC3\\xA9\" }}",
+      "data": {
+        "value": "ABCD\n"
+      },
+      "output": "true|ABCD\n|\u00e9"
+    },
+    {
+      "name": "raw_string_may_contain_delimiters_and_newlines",
+      "template": "{{ contains `a}}b\nc` .value }}",
+      "data": {
+        "value": "a}}b\nc"
+      },
+      "output": "true"
+    },
+    {
+      "name": "left_trim_requires_whitespace",
+      "template": "left {{-.value}}right",
+      "data": {
+        "value": "x"
+      },
+      "error": "malformed template trim marker",
+      "diagnostic": "parse_error"
+    },
+    {
+      "name": "right_trim_requires_whitespace",
+      "template": "left {{ .value-}}right",
+      "data": {
+        "value": "x"
+      },
+      "error": "malformed template trim marker",
+      "diagnostic": "parse_error"
+    },
+    {
+      "name": "unterminated_comment",
+      "template": "left {{/* comment }} right",
+      "data": {},
+      "error": "unterminated template comment",
+      "diagnostic": "parse_error"
+    },
+    {
+      "name": "comment_requires_immediate_delimiter",
+      "template": "{{/* comment */ }}",
+      "data": {},
+      "error": "unterminated template comment",
+      "diagnostic": "parse_error"
+    },
+    {
+      "name": "empty_action",
+      "template": "{{}}",
+      "data": {},
+      "error": "empty template action",
+      "diagnostic": "parse_error"
+    },
+    {
+      "name": "empty_pipeline_stage",
+      "template": "{{ | .value }}",
+      "data": {
+        "value": "x"
+      },
+      "error": "empty template action",
+      "diagnostic": "parse_error"
+    },
+    {
+      "name": "character_literal_rejected",
+      "template": "{{ 'x' }}",
+      "data": {},
+      "error": "character literals are not supported",
+      "diagnostic": "parse_error"
+    },
+    {
+      "name": "invalid_escape_rejected",
+      "template": "{{ \"\\q\" }}",
+      "data": {},
+      "error": "invalid quoted template literal",
+      "diagnostic": "parse_error"
+    },
+    {
+      "name": "raw_newline_in_quoted_string_rejected",
+      "template": "{{ \"line\nbreak\" }}",
+      "data": {},
+      "error": "invalid quoted template literal",
+      "diagnostic": "parse_error"
+    },
+    {
+      "name": "missing_template",
+      "template": "{{ template \"missing\" . }}",
+      "data": {},
+      "error": "missing template definition: missing",
+      "diagnostic": "missing_template"
+    },
+    {
+      "name": "missing_variable",
+      "template": "{{ $missing }}",
+      "data": {},
+      "error": "missing template variable: $missing",
+      "diagnostic": "missing_variable"
+    },
+    {
+      "name": "missing_value",
+      "template": "{{ .env.MISSING }}",
+      "data": {
+        "env": {}
+      },
+      "error": "missing template value: .env.MISSING",
+      "diagnostic": "missing_value"
+    },
+    {
+      "name": "default_keeps_missing_values_strict",
+      "template": "{{ default \"fallback\" .env.MISSING }}",
+      "data": {
+        "env": {}
+      },
+      "error": "missing template value: .env.MISSING",
+      "diagnostic": "missing_value"
+    },
+    {
+      "name": "unsupported_helper",
+      "template": "{{ unknown \"value\" }}",
+      "data": {},
+      "error": "unsupported safe Sprig helper: unknown",
+      "diagnostic": "unsupported_function"
+    },
+    {
+      "name": "helper_wrong_arity",
+      "template": "{{ trim .value \"extra\" }}",
+      "data": {
+        "value": "neo"
+      },
+      "error": "safe Sprig helper trim expects 1 arguments, received 2",
+      "diagnostic": "unsupported_function"
+    },
+    {
+      "name": "unterminated_action",
+      "template": "{{ .env.NAME",
+      "data": {
+        "env": {
+          "NAME": "acme"
+        }
+      },
+      "error": "unterminated template action",
+      "diagnostic": "parse_error"
+    },
+    {
+      "name": "range_two_variables_over_a_map",
+      "template": "{{ range $name, $cfg := .services }}{{ $name }}={{ $cfg.image }};{{ end }}",
+      "data": {
+        "services": {
+          "api": {
+            "image": "api:1",
+            "replicas": 2
+          },
+          "web": {
+            "image": "web:1",
+            "replicas": 1
+          }
+        }
+      },
+      "output": "api=api:1;web=web:1;"
+    },
+    {
+      "name": "range_one_variable_over_a_map",
+      "template": "{{ range $cfg := .services }}{{ $cfg.image }};{{ end }}",
+      "data": {
+        "services": {
+          "api": {
+            "image": "api:1",
+            "replicas": 2
+          },
+          "web": {
+            "image": "web:1",
+            "replicas": 1
+          }
+        }
+      },
+      "output": "api:1;web:1;"
+    },
+    {
+      "name": "range_index_and_element_over_a_list",
+      "template": "{{ range $i, $v := .list }}{{ $i }}:{{ $v }};{{ end }}",
+      "data": {
+        "list": [
+          "a",
+          "b"
+        ]
+      },
+      "output": "0:a;1:b;"
+    },
+    {
+      "name": "range_one_variable_over_a_list",
+      "template": "{{ range $v := .list }}{{ $v }},{{ end }}",
+      "data": {
+        "list": [
+          "a",
+          "b"
+        ]
+      },
+      "output": "a,b,"
+    },
+    {
+      "name": "range_rebinds_the_dot",
+      "template": "{{ range $name, $cfg := .services }}{{ $name }}={{ .image }};{{ end }}",
+      "data": {
+        "services": {
+          "api": {
+            "image": "api:1",
+            "replicas": 2
+          },
+          "web": {
+            "image": "web:1",
+            "replicas": 1
+          }
+        }
+      },
+      "output": "api=api:1;web=web:1;"
+    },
+    {
+      "name": "range_resolves_a_path_on_the_bound_value",
+      "template": "{{ range $k, $v := .deep }}{{ $k }}{{ $v.b.c }}{{ end }}",
+      "data": {
+        "deep": {
+          "a": {
+            "b": {
+              "c": "deep"
+            }
+          }
+        }
+      },
+      "output": "adeep"
+    },
+    {
+      "name": "range_empty_map_takes_else",
+      "template": "[{{ range $k, $v := .services }}body{{ else }}empty{{ end }}]",
+      "data": {
+        "services": {}
+      },
+      "output": "[empty]"
+    },
+    {
+      "name": "range_populated_map_uses_body",
+      "template": "[{{ range $k, $v := .services }}{{ $k }}{{ else }}empty{{ end }}]",
+      "data": {
+        "services": {
+          "api": {
+            "image": "api:1",
+            "replicas": 2
+          },
+          "web": {
+            "image": "web:1",
+            "replicas": 1
+          }
+        }
+      },
+      "output": "[apiweb]"
+    },
+    {
+      "name": "range_outer_variable_still_reachable",
+      "template": "{{ $p := .p }}{{ range $n, $c := .services }}{{ $p }}{{ $n }}{{ end }}",
+      "data": {
+        "p": "x",
+        "services": {
+          "api": {
+            "image": "api:1",
+            "replicas": 2
+          },
+          "web": {
+            "image": "web:1",
+            "replicas": 1
+          }
+        }
+      },
+      "output": "xapixweb"
+    },
+    {
+      "name": "range_without_declaration_rebinds_the_dot",
+      "template": "{{ range .services }}{{ .image }};{{ end }}",
+      "data": {
+        "services": {
+          "api": {
+            "image": "api:1",
+            "replicas": 2
+          },
+          "web": {
+            "image": "web:1",
+            "replicas": 1
+          }
+        }
+      },
+      "output": "api:1;web:1;"
+    },
+    {
+      "name": "range_scalar_source_takes_else",
+      "template": "[{{ range $k, $v := .services }}body{{ else }}empty{{ end }}]",
+      "data": {
+        "services": "scalar"
+      },
+      "output": "[empty]"
+    },
+    {
+      "name": "range_compose_service_block",
+      "template": "services:\n{{- range $name, $cfg := .values.services }}\n  {{ $name }}:\n    image: {{ $cfg.image }}\n{{- end }}\n",
+      "data": {
+        "values": {
+          "services": {
+            "api": {
+              "image": "api:1",
+              "replicas": 2
+            },
+            "web": {
+              "image": "web:1",
+              "replicas": 1
+            }
+          }
+        }
+      },
+      "output": "services:\n  api:\n    image: api:1\n  web:\n    image: web:1\n"
+    },
+    {
+      "name": "range_three_declarations_rejected",
+      "template": "{{ range $a, $b, $c := .services }}{{ end }}",
+      "error": "unsupported template action: range $a, $b, $c := .services",
+      "data": {}
+    },
+    {
+      "name": "range_assign_without_declaration_rejected",
+      "template": "{{ range $k, $v }}{{ end }}",
+      "error": "unsupported template action: range $k, $v",
+      "data": {}
+    },
+    {
+      "name": "number_renders_like_go",
+      "template": "[{{ .v }}]",
+      "data": {
+        "v": 8080
+      },
+      "output": "[8080]"
+    },
+    {
+      "name": "number_fraction_renders_like_go",
+      "template": "[{{ .v }}]",
+      "data": {
+        "v": 1.5
+      },
+      "output": "[1.5]"
+    },
+    {
+      "name": "number_scientific_threshold_like_go",
+      "template": "[{{ .v }}]",
+      "data": {
+        "v": 1000000
+      },
+      "output": "[1e+06]"
+    },
+    {
+      "name": "number_below_scientific_threshold_like_go",
+      "template": "[{{ .v }}]",
+      "data": {
+        "v": 999999
+      },
+      "output": "[999999]"
+    },
+    {
+      "name": "number_zero_renders_like_go",
+      "template": "[{{ .v }}]",
+      "data": {
+        "v": 0
+      },
+      "output": "[0]"
+    },
+    {
+      "name": "number_zero_is_falsy_like_go",
+      "template": "[{{ if .v }}yes{{ else }}no{{ end }}]",
+      "data": {
+        "v": 0
+      },
+      "output": "[no]"
+    },
+    {
+      "name": "number_nonzero_is_truthy_like_go",
+      "template": "[{{ if .v }}yes{{ else }}no{{ end }}]",
+      "data": {
+        "v": 5
+      },
+      "output": "[yes]"
+    },
+    {
+      "name": "null_renders_like_go",
+      "template": "v={{ .n }}",
+      "data": {
+        "n": null
+      },
+      "output": "v=<no value>"
+    },
+    {
+      "name": "null_is_falsy_like_go",
+      "template": "[{{ if .n }}yes{{ else }}no{{ end }}]",
+      "data": {
+        "n": null
+      },
+      "output": "[no]"
+    },
+    {
+      "name": "numbers_inside_a_ranged_map",
+      "template": "{{ range $k, $c := .s }}{{ $k }}:{{ $c.replicas }};{{ end }}",
+      "data": {
+        "s": {
+          "api": {
+            "image": "api:1",
+            "replicas": 3
+          },
+          "web": {
+            "image": "web:1",
+            "replicas": 0
+          }
+        }
+      },
+      "output": "api:3;web:0;"
+    }
+  ]
+}

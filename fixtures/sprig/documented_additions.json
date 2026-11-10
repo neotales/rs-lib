@@ -1,0 +1,10 @@
+{
+  "_comment": [
+    "Helpers this crate implements that the reference does not register.",
+    "Each entry needs a reason: an undocumented addition is indistinguishable from",
+    "a mistake, and a helper that exists only in one implementation would make a",
+    "template written against the reference fail elsewhere. The list is",
+    "intentionally empty at the moment — every helper here has a reference spelling."
+  ],
+  "additions": []
+}
