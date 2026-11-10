@@ -1,0 +1,30 @@
+[package]
+name = "neotales-x509"
+description = "X.509 certificate identifiers, parsing and generation, and the SSH wire conversions for certificates and keys"
+version = "0.0.0-alpha.1"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["x509", "certificate", "ssh", "pkcs8", "ed25519"]
+categories = ["cryptography", "network-programming"]
+
+[dependencies]
+aes.workspace = true
+base64.workspace = true
+ctr.workspace = true
+blowfish.workspace = true
+ed25519-dalek.workspace = true
+p256 = { workspace = true, features = ["arithmetic", "ecdsa", "pkcs8"] }
+p384.workspace = true
+p521.workspace = true
+rcgen.workspace = true
+rsa.workspace = true
+sha2 = "0.11"
+subtle.workspace = true
+time.workspace = true
+zeroize.workspace = true
+
+[lints]
+workspace = true
