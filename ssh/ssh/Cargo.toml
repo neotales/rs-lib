@@ -1,0 +1,40 @@
+[package]
+name = "neotales-ssh"
+description = "SSH-2 wire codec, key exchange, authentication and transport"
+version = "0.0.0-alpha.2"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["ssh", "sftp", "scp", "cryptography", "network-programming"]
+categories = ["cryptography", "network-programming"]
+
+[dependencies]
+aes.workspace = true
+aes-gcm.workspace = true
+chacha20.workspace = true
+ctr.workspace = true
+ed25519-dalek.workspace = true
+flate2.workspace = true
+getrandom.workspace = true
+hmac.workspace = true
+ml-kem.workspace = true
+neotales-x509 = { path = "../../crypto/x509", version = "0.0.0-alpha.1" }
+p256 = { workspace = true, features = ["arithmetic"] }
+p384 = { workspace = true, features = ["arithmetic"] }
+p521 = { workspace = true, features = ["arithmetic"] }
+poly1305.workspace = true
+rsa = { workspace = true, features = ["sha2"] }
+sha1.workspace = true
+sha2 = "0.11"
+subtle.workspace = true
+x25519-dalek.workspace = true
+# A direct dependency because a public type carries `zeroize::Zeroizing`.
+zeroize.workspace = true
+
+[target.'cfg(unix)'.dev-dependencies]
+nix.workspace = true
+
+[lints]
+workspace = true

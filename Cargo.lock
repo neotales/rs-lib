@@ -30,6 +30,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "aes-gcm"
+version = "0.11.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f2b8006a0c83f52b62ba44a97b58bf76fe2f70a329e588f67f89691d93d498f"
+dependencies = [
+ "aead",
+ "aes",
+ "cipher",
+ "ctr",
+ "ctutils",
+ "ghash",
+]
+
+[[package]]
 name = "anyhow"
 version = "1.0.104"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -660,6 +674,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "ghash"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2eecf2d5dc9b66b732b97707a0210906b1d30523eb773193ab777c0c84b3e8d5"
+dependencies = [
+ "polyval",
+]
+
+[[package]]
 name = "group"
 version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -979,6 +1002,7 @@ dependencies = [
  "hybrid-array",
  "kem",
  "module-lattice",
+ "pkcs8 0.11.0",
  "rand_core 0.10.1",
  "sha3",
  "shake",
@@ -1116,6 +1140,33 @@ dependencies = [
 [[package]]
 name = "neotales-sprig"
 version = "0.0.0-alpha.1"
+
+[[package]]
+name = "neotales-ssh"
+version = "0.0.0-alpha.2"
+dependencies = [
+ "aes",
+ "aes-gcm",
+ "chacha20",
+ "ctr",
+ "ed25519-dalek",
+ "flate2",
+ "getrandom 0.3.4",
+ "hmac",
+ "ml-kem",
+ "neotales-x509",
+ "nix",
+ "p256",
+ "p384",
+ "p521",
+ "poly1305",
+ "rsa",
+ "sha1",
+ "sha2 0.11.1",
+ "subtle",
+ "x25519-dalek",
+ "zeroize",
+]
 
 [[package]]
 name = "neotales-x509"
@@ -1394,6 +1445,17 @@ version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6e2d0073b297041425c7c3df6eb4792d598a15323fe63346852b092eca02904c"
 dependencies = [
+ "cpufeatures 0.3.1",
+ "universal-hash",
+]
+
+[[package]]
+name = "polyval"
+version = "0.7.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f0fa31d631f2b2cb2a544d0aa321ce847a94764d701ca2becc411138b93d49cd"
+dependencies = [
+ "cpubits",
  "cpufeatures 0.3.1",
  "universal-hash",
 ]
