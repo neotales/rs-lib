@@ -412,6 +412,21 @@ impl ClientConfig {
 
 /// Runs the SSH client handshake with the supported default proposal.
 ///
+/// The trust callback runs only after the peer host key has been verified;
+/// returning `Err` rejects that key.
+///
+/// This example uses an empty stream to demonstrate that a peer which sends no
+/// banner fails before the callback runs; it does not complete a handshake.
+///
+/// ```
+/// use neotales_ssh::client::connect;
+///
+/// let result = connect(std::io::Cursor::new(Vec::<u8>::new()), |_host_key| {
+///     Err::<(), &'static str>("reject host key")
+/// });
+/// assert!(result.is_err());
+/// ```
+///
 /// # Errors
 ///
 /// Returns the same errors as [`ClientConfig::connect`].

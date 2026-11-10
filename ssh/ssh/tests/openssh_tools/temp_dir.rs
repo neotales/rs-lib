@@ -359,17 +359,18 @@ mod tests {
         let child = super::ChildGuard::spawn_tree(&mut command).unwrap();
         let child_pid = i32::try_from(child.id()).unwrap();
         let deadline = std::time::Instant::now() + std::time::Duration::from_secs(5);
-        while !descendant_pid_file.exists() {
+        let descendant_pid = loop {
+            if let Ok(contents) = fs::read_to_string(&descendant_pid_file)
+                && let Ok(pid) = contents.trim().parse::<i32>()
+            {
+                break pid;
+            }
             assert!(
                 std::time::Instant::now() < deadline,
-                "helper did not spawn descendant"
+                "helper did not write a valid descendant pid"
             );
             std::thread::sleep(std::time::Duration::from_millis(10));
-        }
-        let descendant_pid: i32 = fs::read_to_string(&descendant_pid_file)
-            .unwrap()
-            .parse()
-            .unwrap();
+        };
         drop(child);
 
         let reap_deadline = std::time::Instant::now() + std::time::Duration::from_secs(5);
