@@ -1,0 +1,33 @@
+[package]
+name = "neotales-docker-bake"
+description = "Normalized Docker Bake document parsing and target planning"
+version = "0.0.0-alpha.1"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["docker", "bake", "build", "hcl", "oci"]
+categories = ["config", "compilers"]
+
+[features]
+default = []
+templates = ["dep:neotales-gotmpl", "dep:neotales-sprig"]
+
+[dependencies]
+indexmap.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+# Each of these moved into its own area when the repository was laid out, and each
+# carries a version as well as a path: cargo ignores the version while the path
+# resolves, and refuses to publish the crate without it.
+neotales-dotenv = { path = "../../std/dotenv", version = "0.0.0-alpha.1" }
+neotales-env = { path = "../../std/env", version = "0.0.0-alpha.1" }
+neotales-gotmpl = { path = "../../templates/gotmpl", version = "0.0.0-alpha.1", optional = true }
+neotales-sprig = { path = "../../templates/sprig", version = "0.0.0-alpha.1", optional = true }
+
+[dev-dependencies]
+tempfile.workspace = true
+
+[lints]
+workspace = true

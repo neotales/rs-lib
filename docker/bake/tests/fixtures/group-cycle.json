@@ -1,0 +1,13 @@
+{
+  "group": {
+    "first": {
+      "targets": ["second"]
+    },
+    "second": {
+      "targets": ["first"]
+    }
+  },
+  "target": {
+    "app": {}
+  }
+}

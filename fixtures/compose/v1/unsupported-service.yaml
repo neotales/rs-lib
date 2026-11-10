@@ -1,0 +1,6 @@
+services:
+  api:
+    image: alpine:3.20
+    build: .
+    environment:
+      PORT: "8080"

@@ -1,0 +1,13 @@
+{
+  "target": {
+    "first": {
+      "inherits": ["second"]
+    },
+    "second": {
+      "inherits": ["third"]
+    },
+    "third": {
+      "inherits": ["first"]
+    }
+  }
+}

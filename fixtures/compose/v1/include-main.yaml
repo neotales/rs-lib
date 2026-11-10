@@ -1,0 +1,7 @@
+include:
+  - shared.yaml
+services:
+  app:
+    image: alpine:3.20
+    environment:
+      FROM_MAIN: "yes"

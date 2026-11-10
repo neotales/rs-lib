@@ -1,0 +1,12 @@
+{
+  "variable": {
+    "TAG": {"default": "latest"}
+  },
+  "target": {
+    "app": {
+      "tags": [
+        "{{ .repository | lower }}:${TAG}"
+      ]
+    }
+  }
+}

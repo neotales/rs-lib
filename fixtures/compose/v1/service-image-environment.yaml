@@ -1,0 +1,15 @@
+name: compose-basics
+version: "3.9"
+services:
+  web:
+    image: ghcr.io/example/web:${TAG:-dev}
+    environment:
+      LOG_LEVEL: info
+      EMPTY:
+      RELEASE: ${RELEASE:-dev}
+      PRICE: $$5
+  worker:
+    image: ghcr.io/example/worker:stable
+    environment:
+      - WORKER_ID=worker-1
+      - CI

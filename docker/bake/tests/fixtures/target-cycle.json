@@ -1,0 +1,14 @@
+{
+  "target": {
+    "first": {
+      "contexts": {
+        "next": "target:second"
+      }
+    },
+    "second": {
+      "contexts": {
+        "next": "target:first"
+      }
+    }
+  }
+}

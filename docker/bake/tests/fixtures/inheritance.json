@@ -1,0 +1,32 @@
+{
+  "variable": {
+    "BASE_TAG": {
+      "default": "base"
+    }
+  },
+  "target": {
+    "base": {
+      "context": "./base",
+      "dockerfile": "base.Dockerfile",
+      "args": {
+        "MODE": "base",
+        "KEEP": "yes"
+      },
+      "tags": ["example/base:${BASE_TAG}"],
+      "platforms": ["linux/amd64"],
+      "target": "builder",
+      "no-cache": true,
+      "pull": false
+    },
+    "app": {
+      "inherits": ["base"],
+      "args": {
+        "MODE": "app"
+      },
+      "tags": ["example/app:${BASE_TAG}"],
+      "platforms": ["linux/arm64"],
+      "target": "runtime",
+      "pull": true
+    }
+  }
+}

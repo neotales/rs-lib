@@ -1,0 +1,22 @@
+{
+  "name": "compose-basics",
+  "version": "3.9",
+  "services": {
+    "web": {
+      "image": "ghcr.io/example/web:2026.09",
+      "environment": {
+        "EMPTY": "",
+        "LOG_LEVEL": "info",
+        "PRICE": "$5",
+        "RELEASE": "stable"
+      }
+    },
+    "worker": {
+      "image": "ghcr.io/example/worker:stable",
+      "environment": {
+        "CI": "fixture",
+        "WORKER_ID": "worker-1"
+      }
+    }
+  }
+}

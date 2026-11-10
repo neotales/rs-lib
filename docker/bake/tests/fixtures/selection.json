@@ -1,0 +1,30 @@
+{
+  "group": {
+    "default": {
+      "targets": ["app", "lint"]
+    },
+    "release": {
+      "targets": ["app", "test"]
+    }
+  },
+  "target": {
+    "base": {
+      "context": "./base",
+      "dockerfile": "Base.Dockerfile"
+    },
+    "app": {
+      "contexts": {
+        "source": "target:base"
+      },
+      "tags": ["example/app:latest"]
+    },
+    "lint": {
+      "context": "./lint",
+      "dockerfile": "lint.Dockerfile"
+    },
+    "test": {
+      "inherits": ["app"],
+      "tags": ["example/test:latest"]
+    }
+  }
+}

@@ -1,0 +1,24 @@
+name: slice
+services:
+  db:
+    image: postgres:16
+  app:
+    image: alpine:3.20
+    depends_on:
+      - db
+    command: ["sleep", "1"]
+    environment:
+      MODE: test
+      API_TOKEN: super-secret
+    volumes:
+      - data:/data:ro
+      - type: tmpfs
+        target: /scratch
+    networks:
+      private:
+        aliases:
+          - api
+networks:
+  private: {}
+volumes:
+  data: {}

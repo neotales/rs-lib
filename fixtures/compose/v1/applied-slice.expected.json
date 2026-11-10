@@ -1,0 +1,37 @@
+{
+  "image": "alpine:3.20",
+  "command": [
+    "sleep",
+    "1"
+  ],
+  "environment": [
+    "API_TOKEN=super-secret",
+    "MODE=test"
+  ],
+  "labels": {
+    "com.docker.compose.container-number": "1",
+    "com.docker.compose.depends-on": "db",
+    "com.docker.compose.network": "slice_private",
+    "com.docker.compose.oneoff": "False",
+    "com.docker.compose.project": "slice",
+    "com.docker.compose.service": "app",
+    "com.docker.compose.version": "neotales",
+    "com.neotales.compose.config-digest": "<config-digest>"
+  },
+  "exposed_ports": [],
+  "binds": [
+    "slice_data:/data:ro"
+  ],
+  "tmpfs": {
+    "/scratch": ""
+  },
+  "networks": [
+    {
+      "network": "slice_private",
+      "aliases": [
+        "app",
+        "api"
+      ]
+    }
+  ]
+}

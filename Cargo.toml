@@ -5,6 +5,7 @@ members = [
   "std/dotenv",
   "std/env",
   "os/process",
+  "docker/bake",
   "docker/buildkit",
   "docker/oci",
   "docker/engine",

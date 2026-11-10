@@ -1419,6 +1419,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "neotales-docker-bake"
+version = "0.0.0-alpha.1"
+dependencies = [
+ "indexmap",
+ "neotales-dotenv",
+ "neotales-env",
+ "neotales-gotmpl",
+ "neotales-sprig",
+ "serde",
+ "serde_json",
+ "tempfile",
+]
+
+[[package]]
 name = "neotales-docker-buildkit"
 version = "0.0.0-alpha.1"
 dependencies = [

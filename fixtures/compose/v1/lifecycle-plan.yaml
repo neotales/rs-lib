@@ -1,0 +1,16 @@
+name: lifecycle
+services:
+  db:
+    image: postgres:16
+  app:
+    image: alpine:3.20
+    depends_on:
+      - db
+    volumes:
+      - data:/var/lib/app
+    networks:
+      - private
+networks:
+  private: {}
+volumes:
+  data: {}

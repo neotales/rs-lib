@@ -1,0 +1,10 @@
+[
+  "network:lifecycle_private",
+  "volume:lifecycle_data",
+  "pull:postgres:16",
+  "container:lifecycle-db-1",
+  "start:lifecycle-db-1",
+  "pull:alpine:3.20",
+  "container:lifecycle-app-1",
+  "start:lifecycle-app-1"
+]
