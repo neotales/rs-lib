@@ -1,0 +1,13 @@
+{
+  "ID": "service0123456789abcdef",
+  "Version": {"Index": 7},
+  "CreatedAt": "2026-09-01T10:00:00Z",
+  "UpdatedAt": "2026-09-02T11:00:00Z",
+  "Spec": {
+    "Name": "web",
+    "TaskTemplate": {"ContainerSpec": {"Image": "nginx:alpine"}},
+    "Mode": {"Replicated": {"Replicas": 2}}
+  },
+  "Endpoint": {"Ports": [{"Protocol": "tcp", "TargetPort": 80, "PublishedPort": 8080}]},
+  "ServiceStatus": {"RunningTasks": 2, "DesiredTasks": 2}
+}

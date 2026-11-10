@@ -1,0 +1,16 @@
+{
+  "ID": "swarm-fixture",
+  "Version": {"Index": 12},
+  "CreatedAt": "2026-09-01T10:00:00.000000000Z",
+  "UpdatedAt": "2026-09-02T11:00:00.000000000Z",
+  "Spec": {
+    "Name": "fixture-swarm",
+    "Labels": {"org.example.swarm": "fixture"},
+    "Orchestration": {"TaskHistoryRetentionLimit": 5},
+    "Dispatcher": {"HeartbeatPeriod": 5000000000}
+  },
+  "JoinTokens": {
+    "Worker": "worker-token",
+    "Manager": "manager-token"
+  }
+}

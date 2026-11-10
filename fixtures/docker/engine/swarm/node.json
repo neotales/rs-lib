@@ -1,0 +1,13 @@
+{
+  "ID": "node0123456789abcdef",
+  "Version": {"Index": 4},
+  "Spec": {
+    "Name": "manager-one",
+    "Labels": {"org.example.node": "fixture"},
+    "Role": "manager",
+    "Availability": "active"
+  },
+  "Description": {"Engine": {"EngineVersion": "27.1.1"}},
+  "Status": {"State": "ready"},
+  "ManagerStatus": {"Leader": true, "Reachability": "reachable"}
+}

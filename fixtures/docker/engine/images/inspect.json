@@ -1,0 +1,46 @@
+{
+  "Id": "sha256:image-fixture",
+  "RepoTags": ["registry.example/team/image:latest"],
+  "RepoDigests": ["registry.example/team/image@sha256:digest-fixture"],
+  "Comment": "image fixture comment",
+  "Created": "2026-09-24T12:00:00.123456789Z",
+  "Author": "Fixture Author <fixture@example.invalid>",
+  "Architecture": "amd64",
+  "Variant": "v1",
+  "Os": "linux",
+  "OsVersion": "6.8",
+  "Size": 123456,
+  "Config": {
+    "User": "fixture-user",
+    "ExposedPorts": {"8080/tcp": {}},
+    "Env": ["PATH=/usr/bin", "FIXTURE=true"],
+    "Cmd": ["/bin/sh", "-c", "true"],
+    "Healthcheck": {
+      "Test": ["CMD", "true"],
+      "Interval": 1000000000,
+      "Timeout": 2000000000,
+      "Retries": 3,
+      "StartPeriod": 4000000000,
+      "StartInterval": 5000000000
+    },
+    "ArgsEscaped": false,
+    "Volumes": {"fixture-data": {}},
+    "WorkingDir": "/workspace",
+    "Entrypoint": ["/entrypoint"],
+    "OnBuild": ["RUN echo onbuild"],
+    "Labels": {"org.example.fixture": "inspect"},
+    "StopSignal": "SIGTERM",
+    "Shell": ["/bin/sh", "-c"]
+  },
+  "GraphDriver": {
+    "Name": "overlay2",
+    "Data": {"Dir": "/var/lib/docker/overlay2/fixture"}
+  },
+  "RootFS": {
+    "Type": "layers",
+    "Layers": ["sha256:layer-fixture-2", "sha256:layer-fixture-1"]
+  },
+  "Metadata": {
+    "LastTagTime": "2026-09-24T12:30:00Z"
+  }
+}

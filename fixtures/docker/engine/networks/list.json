@@ -1,0 +1,21 @@
+[
+  {
+    "Name": "fixture-network",
+    "Id": "network-fixture",
+    "Created": "2026-09-24T12:00:00.000000000Z",
+    "Scope": "local",
+    "Driver": "bridge",
+    "EnableIPv4": true,
+    "EnableIPv6": false,
+    "Internal": false,
+    "Attachable": true,
+    "Ingress": false,
+    "ConfigOnly": false,
+    "Options": {
+      "com.docker.network.bridge.name": "br-fixture"
+    },
+    "Labels": {
+      "org.example.fixture": "network"
+    }
+  }
+]

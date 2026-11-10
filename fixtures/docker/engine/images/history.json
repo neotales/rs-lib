@@ -1,0 +1,18 @@
+[
+  {
+    "Id": "sha256:layer-fixture-2",
+    "Created": 1700000002,
+    "CreatedBy": "RUN echo fixture",
+    "Tags": ["registry.example/team/image:latest"],
+    "Size": 2048,
+    "Comment": "top layer"
+  },
+  {
+    "Id": "sha256:layer-fixture-1",
+    "Created": 1700000001,
+    "CreatedBy": "FROM scratch",
+    "Tags": null,
+    "Size": 0,
+    "Comment": "base layer"
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "ID": "task0123456789abcdef",
+  "Version": {"Index": 9},
+  "Name": "web.1",
+  "Spec": {"ContainerSpec": {"Image": "nginx:alpine"}},
+  "ServiceID": "service0123456789abcdef",
+  "Slot": 1,
+  "NodeID": "node0123456789abcdef",
+  "Status": {"State": "running", "Message": "started"},
+  "DesiredState": "running"
+}

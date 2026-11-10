@@ -1,0 +1,13 @@
+{
+  "Name": "fixture-volume",
+  "Driver": "local",
+  "Mountpoint": "/var/lib/docker/volumes/fixture-volume/_data",
+  "CreatedAt": "2026-09-24T12:00:00.000000000Z",
+  "Scope": "local",
+  "Labels": {
+    "org.example.fixture": "volume"
+  },
+  "Options": {
+    "type": "tmpfs"
+  }
+}

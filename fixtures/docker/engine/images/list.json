@@ -1,0 +1,15 @@
+[
+  {
+    "Id": "sha256:image-fixture",
+    "ParentId": "",
+    "RepoTags": ["registry.example/team/image:latest"],
+    "RepoDigests": ["registry.example/team/image@sha256:digest-fixture"],
+    "Created": 1700000000,
+    "Size": 1234,
+    "SharedSize": 12,
+    "Labels": {
+      "org.example.fixture": "true"
+    },
+    "Containers": 2
+  }
+]

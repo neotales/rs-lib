@@ -1,0 +1,21 @@
+[
+  {
+    "ID": "task0123456789abcdef",
+    "Version": {"Index": 9},
+    "CreatedAt": "2026-09-02T11:00:00Z",
+    "UpdatedAt": "2026-09-02T11:01:00Z",
+    "Name": "web.1",
+    "Labels": {"org.example.task": "fixture"},
+    "Spec": {"ContainerSpec": {"Image": "nginx:alpine"}},
+    "ServiceID": "service0123456789abcdef",
+    "Slot": 1,
+    "NodeID": "node0123456789abcdef",
+    "Status": {
+      "State": "running",
+      "Message": "started",
+      "Err": "pull access denied",
+      "Timestamp": "2026-09-02T11:01:00Z"
+    },
+    "DesiredState": "running"
+  }
+]

@@ -1,0 +1,44 @@
+{
+  "Name": "fixture-network",
+  "Id": "network-fixture",
+  "Created": "2026-09-24T12:00:00.000000000Z",
+  "Scope": "local",
+  "Driver": "bridge",
+  "EnableIPv4": true,
+  "EnableIPv6": false,
+  "Internal": false,
+  "Attachable": true,
+  "Ingress": false,
+  "ConfigOnly": false,
+  "IPAM": {
+    "Driver": "default",
+    "Config": [
+      {
+        "Subnet": "172.30.0.0/16",
+        "IPRange": "172.30.1.0/24",
+        "Gateway": "172.30.0.1",
+        "AuxiliaryAddresses": {
+          "router": "172.30.0.2"
+        }
+      }
+    ],
+    "Options": {
+      "foo": "bar"
+    }
+  },
+  "Options": {
+    "com.docker.network.bridge.name": "br-fixture"
+  },
+  "Labels": {
+    "org.example.fixture": "network"
+  },
+  "Containers": {
+    "container-fixture": {
+      "Name": "demo",
+      "EndpointID": "endpoint-fixture",
+      "MacAddress": "02:42:ac:1e:00:02",
+      "IPv4Address": "172.30.0.2/16",
+      "IPv6Address": "2001:db8::2/64"
+    }
+  }
+}

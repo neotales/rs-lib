@@ -1,0 +1,16 @@
+[
+  {
+    "name": "registry.example/team/image",
+    "description": "Fixture image repository",
+    "star_count": 17,
+    "is_official": true,
+    "is_automated": false
+  },
+  {
+    "name": "registry.example/team/image-tools",
+    "description": "Fixture tools repository",
+    "star_count": 3,
+    "is_official": false,
+    "is_automated": false
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "ID": "config0123456789abcdef",
+  "Version": {"Index": 3},
+  "CreatedAt": "2026-09-01T10:00:00Z",
+  "UpdatedAt": "2026-09-02T11:00:00Z",
+  "Spec": {"Name": "app-config", "Data": "aGVsbG8="}
+}

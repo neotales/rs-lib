@@ -1,0 +1,7 @@
+{
+  "ImagesDeleted": [
+    {"Untagged": "registry.example/team/image:old"},
+    {"Deleted": "sha256:image-fixture-old"}
+  ],
+  "SpaceReclaimed": 4096
+}

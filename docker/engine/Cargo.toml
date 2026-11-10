@@ -1,0 +1,107 @@
+[package]
+name = "neotales-docker"
+description = "Repository-native Docker Engine API facade over Bollard"
+version = "0.0.0-alpha.2"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "README.md"
+keywords = ["docker", "engine-api", "containers", "oci", "bollard"]
+categories = ["api-bindings", "network-programming"]
+
+[features]
+default = []
+# Talk to a remote Docker daemon over an SSH connection rather than a socket.
+#
+# Unix only. `openssh` calls `compile_error!` on other platforms, so on Windows
+# this feature is accepted and does nothing rather than failing the build. Selecting
+# a transport the platform cannot provide is a runtime question, not a build one.
+#
+# `bollard/ssh` is deliberately not enabled here. It would pull `openssh` back in
+# through bollard, unconditionally, which reinstates exactly the Windows build
+# failure this feature's target gate exists to avoid. It is also unused: the SSH
+# transport in this crate is repository-owned, in `ssh_transport`, and calls
+# `openssh` directly rather than going through bollard's connector. Enabling
+# bollard's version would have been a second, unused path to the same dependency.
+ssh = ["dep:openssh", "dep:neotales-ssh", "dep:rsa"]
+# TLS for a remote daemon, and a certificate authority to verify it against.
+tls = [
+    "bollard/ssl",
+    "dep:hyper-rustls",
+    "dep:rustls",
+    "dep:rustls-native-certs",
+    "dep:rustls-pki-types",
+]
+
+[dependencies]
+base64.workspace = true
+bollard.workspace = true
+bytes.workspace = true
+futures-core.workspace = true
+futures-util.workspace = true
+http.workspace = true
+http-body-util.workspace = true
+hyper.workspace = true
+# The shared entry carries the client-legacy, http1 and tokio features that the
+# requesters in this workspace need. The proxy layer is this crate's own, so the
+# extra is declared here rather than forced on everyone through the shared table.
+hyper-util = { workspace = true, features = ["client-proxy"] }
+# The TLS stack is declared here rather than in the workspace table because this
+# crate is its only consumer in this repository. A shared entry would read as a
+# decision the whole workspace made, and nobody else here has made one.
+hyper-rustls = { version = "0.27", default-features = false, features = ["http1", "native-tokio", "ring", "tls12"], optional = true }
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"], optional = true }
+rustls-native-certs = { version = "0.8", optional = true }
+rustls-pki-types = { version = "1.7", features = ["std"], optional = true }
+# The SSH wire implementation, used by the owned transport's managed
+# `docker system dial-stdio` mechanism. It is the same crate the `ssh` area
+# publishes, not a fork of it, and the `ssh` feature is what pulls it in: a
+# caller who wants the native `ssh` binary instead still gets it, and a caller
+# who does not want an SSH implementation linked at all still has the default
+# build.
+neotales-ssh = { path = "../../ssh/ssh", version = "0.0.0-alpha.2", optional = true }
+# Only for the RSA branch of `PublicKeySigner`, which takes `rsa::BigUint`
+# components. It is the same version `neotales-ssh` is built against, so the
+# types unify; declaring it here is cheaper than depending on the whole crypto
+# area for three big integers.
+rsa = { workspace = true, optional = true }
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+tar.workspace = true
+# A regular dependency rather than a development one, in the source manifest as
+# well: a layer is unpacked into a temporary directory that a caller can name.
+tempfile.workspace = true
+# The shared entry carries macros, rt, sync and time. This crate additionally needs
+# the filesystem, I/O, network and process drivers.
+tokio = { workspace = true, features = ["fs", "io-util", "net", "process"] }
+tokio-util.workspace = true
+tower-service.workspace = true
+url.workspace = true
+zip.workspace = true
+zeroize.workspace = true
+
+# `openssh` is unix-only and calls `compile_error!` elsewhere, so it is declared
+# per-target rather than in `[dependencies]`. Declaring it unconditionally would
+# make `--all-features` fail to build on Windows, which is one of the three
+# platforms this repository claims.
+[target.'cfg(unix)'.dependencies]
+openssh = { workspace = true, optional = true }
+
+[dev-dependencies]
+# The wire-level suite in `tests/registry_credential_headers.rs` drives the
+# image-transfer operations, whose request bodies are streams. The crate already
+# depends on these three; they are named again here because an integration test
+# can only use this crate's public API and its own dev-dependencies.
+base64.workspace = true
+futures-util.workspace = true
+rcgen = { workspace = true, features = ["zeroize"] }
+# `rt-multi-thread` for the wire-level suite: its fixture waits on a blocking
+# channel while the client's request task runs, which a current-thread runtime
+# cannot do because the waiting task and the request task share one thread.
+tokio = { workspace = true, features = ["rt-multi-thread", "io-util"] }
+tokio-rustls = { version = "0.26", default-features = false, features = ["ring", "tls12"] }
+
+[lints]
+workspace = true

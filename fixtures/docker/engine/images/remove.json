@@ -1,0 +1,8 @@
+[
+  {
+    "Untagged": "registry.example/team/image:latest"
+  },
+  {
+    "Deleted": "sha256:image-fixture"
+  }
+]
